@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <MageShop_Belluno>
+            <version>1.0.0</version>
+        </MageShop_Belluno>
+    </modules>
+ 
+    <global>
+        <models>
+            <belluno>
+                <class>MageShop_Belluno_Model</class>
+            </belluno>
+        </models>
+ 
+        <helpers>
+            <belluno>
+                <class>MageShop_Belluno_Helper</class>
+            </belluno>
+        </helpers>
+ 
+        <blocks>
+            <belluno>
+                <class>MageShop_Belluno_Block</class>
+            </belluno>
+        </blocks>
+        
+        <services>
+            <belluno>
+              <class>MageShop_Belluno_Service</class>
+            </belluno>
+        </services>
+
+        <resources>
+            <belluno_setup>
+                <setup>
+                    <module>MageShop_Belluno</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </belluno_setup>
+            <belluno_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </belluno_write>
+            <belluno_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </belluno_read>
+        </resources>
+        <sales>
+            <order>
+                <states>
+                    <pending_payment>
+                        <visible_on_front>1</visible_on_front>
+                    </pending_payment>
+                </states>
+            </order>
+        </sales>
+    </global>
+
+    <default>
+        <payment>
+            <belluno_pix>
+                <model>belluno/payment_pix</model>
+                <active>1</active>
+                <title>PIX - via Belluno</title>
+                <sort_order>1</sort_order>
+                <order_status>pending</order_status>
+                <allowspecific>0</allowspecific>
+                <payment_action>order</payment_action>
+            </belluno_pix>
+        </payment>
+    </default>
+
+</config>
