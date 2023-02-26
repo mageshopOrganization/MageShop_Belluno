@@ -117,7 +117,7 @@ class MageShop_Belluno_Model_Payment_Pix_CreateRequest {
       ],
       self::CART => $array,
       self::POSTBACK => [
-        self::URL => Mage::getBaseUrl() . 'mageshop/belluno/postback'
+        self::URL => Mage::getBaseUrl() . 'belluno/webhook/postback'
       ]
     ];
     $request = json_encode($request);

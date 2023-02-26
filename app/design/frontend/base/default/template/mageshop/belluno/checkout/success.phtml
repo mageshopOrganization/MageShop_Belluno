@@ -1,0 +1,161 @@
+<?php
+
+
+$orderId = Mage::getSingleton("checkout/session")->getLastOrderId();
+$order = Mage::getModel("sales/order")->load($orderId);
+$payment = $order->getPayment();
+
+if ($orderId && $payment->getMethod() == 'belluno_pix') : 
+	$total = $order->getGrandTotal();  
+   $pix = json_decode($payment->getAdditional_information()['pix'], true); 
+   $pix_expires_at = isset($pix['pix']['expires_at']) ? Mage::getModel('core/date')->timestamp($pix['pix']['expires_at']) : 0; 
+   $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
+
+   if(isset($pix) && $currentTimestamp <= $pix_expires_at){
+    $code = base64_decode($pix['pix']['base64_text']);
+   
+?> 
+
+<style>
+        .payment-pix.sucess-detalhes-pix {
+			width: 100%;
+            margin: auto;
+            display: table;
+			background-color: transparent;
+			border: solid 1px transparent;
+			padding: 40px 20px;
+			box-sizing: border-box;
+        }
+        .payment-pix .qrcode {
+			width: 100%;
+			display: table;
+			float: none;
+			margin: 25px 0;
+		}
+		.payment-pix .qrcode img {
+			width: 85%;
+			max-width: 260px;
+			margin: auto;
+			display: table;
+			padding: 10px;
+			box-sizing: border-box;
+			box-shadow: 0 0 10px rgb(0 0 0 / 12%);
+			border-radius: 5px;
+			background-color: #FFF;
+		}
+		.payment-pix .titulo-pagar-pix {
+			font-size: 22px;
+			color: #000;
+			text-align: center;
+			margin-top: 15px;
+			line-height: 1.2em;
+			text-transform: none;
+			font-weight: 600;
+		}
+        .payment-pix .copyCode {
+            width: 80%;
+            display: table;
+            margin: 30px auto;
+			max-width: 650px;
+        }
+        .payment-pix .copyCode input{
+            width: calc(100% - 140px);
+			height: 45px;
+			line-height: 45px;
+			font-size: 12px;
+			border: solid 1px #666;
+			border-radius: 3px;
+			padding: 0 20px;
+			box-sizing: border-box;
+        }
+		.payment-pix .copyCode input:focus{
+			background-color: #f8f8f8;
+			outline:none;
+			border: solid 1px #111;
+        }
+		.payment-pix .info-expire {
+			font-size: 11px;
+			color: #999;
+			margin-top: 25px;
+			text-align: center;
+		}
+        .payment-pix .copyCode .fieldcopycode {
+            max-width: 130px;
+            width: 100%;
+
+			height: 45px;
+			line-height: 45px;
+			font-size: 22px;
+			padding: 0 5px;
+            float: right;
+            background: #000;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+			text-align: center;
+        }
+        .payment-pix .copyCode .fieldcopycode:hover {
+            background: #111;
+        }
+		@media only screen and (max-width: 767px) {
+			.payment-pix .copyCode input{
+				width: calc(100% - 00px);
+			}
+			.payment-pix .titulo-pagar-pix {
+				font-size: 18px;
+			}
+			.payment-pix .copyCode {
+				width: 100%;
+			}
+			.payment-pix .copyCode .fieldcopycode {
+				max-width: 100%;
+				margin-top: 8px;
+				margin-bottom: 15px;
+			}
+			.payment-pix .qrcode img {
+				width: 100%;
+			}
+		}
+
+		.payment-pix .total {
+            margin: auto;
+            width: 100%;
+            max-width: 267px;
+            text-align: center;
+            padding: 5px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border: 1px solid;
+            border-color: #0d9547;
+            border-radius: 3px;
+        }
+
+        .payment-pix .total .price{
+            color:#0d9547;
+            font-weight: 500;
+            font-size: 17px;
+        }
+        .payment-pix .total span {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0d9547;
+            margin-right: 2px;
+        }
+
+</style>
+    <div class="payment-pix sucess-detalhes-pix">
+		<div class="titulo-pagar-pix">Fazer Pagamento Pix/QR Code:</div>
+		<div class="qrcode">
+			<img src="data:image/png;base64,<?=$pix['pix']['base64_image']?>">
+		</div>
+		<div class="total">
+            <span>Valor:</span><?php echo Mage::helper('core')->currency($total);?>
+        </div>
+		<div class="copyCode">
+			<input type="text" value="<?=$code;?>" id="pixTextBelluno">
+			<div class="fieldcopycode" onclick="copiarTextoPix(this)">Copiar</div>
+			<p class="info-expire">O QR Code expira em: <?php echo date('d/m/Y H:i:s', $pix_expires_at); ?>.<br/>
+			Você também pode fazer o pagamento na seção Minha Conta > Pedidos</p>
+		</div>
+	</div>
+<?php } endif; ?>

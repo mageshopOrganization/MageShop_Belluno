@@ -1,0 +1,42 @@
+<?php 
+$baseUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+$imageIcon = $baseUrl . 'media/mageshop/belluno/images/icon-pix.png';
+$order = $this->getInfo()->getOrder();
+$title = $this->getMethod()->getTitle();
+?>
+<style>
+    .pixpayment_belluno {
+        width: auto;
+        max-width: 200px;
+        display: flex;
+        align-items: center;
+    }
+    .pixpayment_belluno img {
+        width: 35px;
+        margin-right: 10px;
+    }
+    .pixpayment_belluno p {margin-left: 10px;}
+</style>
+<div class="pixpayment_belluno">
+    <img src="<?php echo $imageIcon?>" alt="<?php echo $title; ?>" width="120px">
+    <p><?php echo $title; ?></p>
+</div>
+<br>
+<?php
+
+if(!$order){
+ return;   
+}
+$state = $order->getState();
+$payment = $order->getPayment();
+$method = $payment->getMethod();
+$url_store =  Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+$transaction_id = isset($payment->getAdditional_information()['transaction_id']) ? $payment->getAdditional_information()['transaction_id'] : null;
+$total = $order->getGrandTotal();
+$state_pedding = array(
+    "new",
+    "pending_payment"
+);
+if($method == 'belluno_creditcard'): ?>
+
+<?php endif; ?>

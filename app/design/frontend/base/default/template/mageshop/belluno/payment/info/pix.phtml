@@ -1,0 +1,185 @@
+<?php 
+$baseUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+$imageIcon = $baseUrl . 'media/mageshop/belluno/images/icon-pix.png';
+$order = $this->getInfo()->getOrder();
+$title = $this->getMethod()->getTitle();
+?>
+<style>
+    .pixpayment_belluno {
+        width: auto;
+        max-width: 200px;
+        display: flex;
+        align-items: center;
+    }
+    .pixpayment_belluno img {
+        width: 35px;
+        margin-right: 10px;
+    }
+    .pixpayment_belluno p {margin-left: 10px;}
+</style>
+<div class="pixpayment_belluno">
+    <img src="<?php echo $imageIcon?>" alt="<?php echo $title; ?>" width="120px">
+    <p><?php echo $title; ?></p>
+</div>
+<br>
+<?php
+
+if(!$order){
+ return;   
+}
+$state = $order->getState();
+$payment = $order->getPayment();
+$method = $payment->getMethod();
+$url_store =  Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+$transaction_id = isset($payment->getAdditional_information()['transaction_id']) ? $payment->getAdditional_information()['transaction_id'] : null;
+$total = $order->getGrandTotal();
+$state_pedding = array(
+    "new",
+    "pending_payment"
+);
+if($method == 'belluno_pix' && in_array($state, $state_pedding)): 
+$pix = json_decode($payment->getAdditional_information()['pix'], true); 
+$pix_expires_at = isset($pix['pix']['expires_at']) ? Mage::getModel('core/date')->timestamp($pix['pix']['expires_at']) : 0; 
+$currentTimestamp = Mage::getModel('core/date')->timestamp(time());
+$transaction_id = isset($pix['id']) ? $pix['id'] : null;
+   if(isset($pix) && $currentTimestamp <= $pix_expires_at): $code = base64_decode($pix['pix']['base64_text']); ?>
+    <style>
+        .payment-pix.order-detalhes-pix-info {
+            width: 100%;
+            margin: 0;
+            display: table;
+            background-color: #ffffff0a;
+            border: solid 1px #ffffff0a;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+        .payment-pix .qrcode-info {
+            width: 100%;
+            display: inline-block;
+            float: none;
+            margin: 5px 10px;
+        }
+		.payment-pix .qrcode-info img {
+			width: 85%;
+			max-width: 200px;
+			margin: auto;
+			display: table;
+			padding: 10px;
+			box-sizing: border-box;
+			box-shadow: 0 0 10px rgb(0 0 0 / 12%);
+			border-radius: 5px;
+
+		}
+		.payment-pix .titulo-pagar-pix {
+			font-size: 22px;
+			color: #000;
+			text-align: center;
+			margin-top: 15px;
+			line-height: 1.2em;
+			text-transform: none;
+			font-weight: 600;
+		}
+        .payment-pix .copyCode-info {
+            width: 100%;
+            display: inline-block;
+            margin: 10px auto;
+        }
+        .payment-pix .copyCode-info input{
+            width: calc(100% - 140px);
+			height: 35px;
+			line-height: 35px;
+			font-size: 12px;
+			border: solid 1px #666;
+			border-radius: 3px;
+			padding: 0 20px;
+			box-sizing: border-box;
+        }
+		.payment-pix .copyCode-info input:focus{
+			background-color: #f8f8f8;
+			outline:none;
+			border: solid 1px #111;
+        }
+		.payment-pix .info-expire {
+			font-size: 11px;
+			color: #999;
+			margin-top: 25px;
+			text-align: center;
+		}
+        .payment-pix .copyCode-info .fieldcopycode {
+            max-width: 130px;
+            width: 100%;
+			height: 35px;
+			line-height: 35px;
+			font-size: 15px;
+			padding: 0 5px;
+            float: right;
+            background: #000;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+			text-align: center;
+        }
+        .payment-pix .copyCode-info .fieldcopycode:hover {
+            background: #111;
+        }
+        
+		@media only screen and (max-width: 767px) {
+			.payment-pix .copyCode-info input{
+				width: calc(100% - 00px);
+			}
+			.payment-pix .titulo-pagar-pix {
+				font-size: 18px;
+			}
+			.payment-pix .copyCode-info {
+				width: 100%;
+			}
+			.payment-pix .copyCode-info .fieldcopycode {
+				max-width: 100%;
+				margin-top: 8px;
+				margin-bottom: 15px;
+			}
+			.payment-pix .qrcode-info img {
+				width: 100%;
+			}
+		}
+        .payment-pix .total-info {
+            margin: auto;
+            width: 40%;
+            display: inline-block;
+            max-width: 267px;
+            text-align: center;
+            padding: 5px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border: 1px solid;
+            border-color: #0d9547;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .payment-pix .total-info .price{
+            color:#0d9547;
+            font-weight: 500;
+            font-size: 17px;
+        }
+        .payment-pix .total-info span {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0d9547;
+            margin-right: 2px;
+        }
+    </style>
+     <div class="payment-pix order-detalhes-pix-info">
+		<div class="qrcode-info">
+            <img src="data:image/png;base64,<?=$pix['pix']['base64_image']?>">
+            <p class="info-expire">O QR Code expira em: <?php echo date('d/m/Y H:i:s', $pix_expires_at); ?></p>
+        </div>
+        <div class="copyCode-info">
+            <input type="text" value="<?=$code;?>" id="pixTextBelluno">
+            <div class="fieldcopycode" onclick="copiarTextoPix(this)">Copiar</div>
+        </div>
+    </div>
+    <?php else: ?>
+        <div> <b><?php echo Mage::helper('core')->__("PIX") ?></b></div>
+    <?php endif; ?>
+<?php endif; ?>

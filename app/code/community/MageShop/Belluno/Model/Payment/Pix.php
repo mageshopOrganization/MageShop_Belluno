@@ -4,7 +4,7 @@ class MageShop_Belluno_Model_Payment_Pix extends Mage_Payment_Model_Method_Abstr
   
     protected $_code = 'belluno_pix';
     protected $_formBlockType = 'belluno/form_pix';
-    //protected $_infoBlockType = 'mageshop/belluno/info';
+    protected $_infoBlockType = 'belluno/info_pix';
 
     protected $_canOrder = true;
     protected $_isInitializeNeeded = true;

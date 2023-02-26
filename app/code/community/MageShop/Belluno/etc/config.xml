@@ -73,7 +73,35 @@
                 <allowspecific>0</allowspecific>
                 <payment_action>order</payment_action>
             </belluno_pix>
+            <belluno_creditcard>
+                <model>belluno/payment_creditcard</model>
+                <active>1</active>
+                <title>Cartão de Crédito - via Belluno</title>
+                <sort_order>1</sort_order>
+                <order_status>pending</order_status>
+                <allowspecific>0</allowspecific>
+                <payment_action>order</payment_action>
+            </belluno_creditcard>
         </payment>
     </default>
+
+    <frontend>
+        <layout>
+            <updates>
+                <belluno>
+                    <file>mageshop/belluno.xml</file>
+                </belluno>
+            </updates>
+        </layout>
+        <routers>
+            <mageshop_belluno>
+                <use>standard</use>
+                <args>
+                    <module>MageShop_Belluno</module>
+                    <frontName>belluno</frontName>
+                </args>
+            </mageshop_belluno>
+        </routers>
+    </frontend>
 
 </config>
