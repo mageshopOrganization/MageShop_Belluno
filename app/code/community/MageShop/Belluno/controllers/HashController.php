@@ -1,6 +1,6 @@
 <?php
 
-class MageShop_Belluno_HashController extends Mage_Core_Controller_Front_Action
+class MageShop_Belluno_HashController extends MageShop_Belluno_Controller_AbstractController
 {
   const URI = '/transaction/card_hash_key';
   protected $_helper;

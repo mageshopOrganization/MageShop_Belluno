@@ -104,4 +104,14 @@
         </routers>
     </frontend>
 
+    <adminhtml>
+        <layout>
+        <updates>
+            <mageshop_belluno>
+            <file>mageshop/belluno.xml</file>
+            </mageshop_belluno>
+        </updates>
+        </layout>
+    </adminhtml>
+
 </config>
