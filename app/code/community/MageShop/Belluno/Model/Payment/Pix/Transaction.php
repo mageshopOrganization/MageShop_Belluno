@@ -19,7 +19,9 @@ class MageShop_Belluno_Model_Payment_Pix_Transaction
     $pix = [
       'id' => $response['transaction']['transaction_id'],
       'pix' => $response['transaction']['pix'],
-      'url' => $response['transaction']['url']
+      'url' => $response['transaction']['url'],
+      'link' => $response['transaction']['link'],
+      'link_code' => $response['transaction']['link_code'],
     ];
     $info->setAdditionalInformation("status", $response['transaction']['status']);
     $info->setAdditionalInformation("pix", json_encode($pix));

@@ -6,14 +6,19 @@ $order = Mage::getModel("sales/order")->load($orderId);
 $payment = $order->getPayment();
 
 if ($orderId && $payment->getMethod() == 'belluno_pix') : 
-	$total = $order->getGrandTotal();  
-   $pix = json_decode($payment->getAdditional_information()['pix'], true); 
+   $total = $order->getGrandTotal();  
+   $pix = json_decode($payment->getAdditional_information()['pix'], true);
    $pix_expires_at = isset($pix['pix']['expires_at']) ? Mage::getModel('core/date')->timestamp($pix['pix']['expires_at']) : 0; 
    $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
-
+   $transaction_id = isset($pix['id']) ? $pix['id'] : null;
    if(isset($pix) && $currentTimestamp <= $pix_expires_at){
-    $code = base64_decode($pix['pix']['base64_text']);
-   
+   $code = base64_decode($pix['pix']['base64_text']);
+   $link_code = $pix['link_code'];
+   $websocket = sprintf(
+		"%sbelluno/websocket?belluno_pix=%s", 
+		Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB),
+		$transaction_id
+	);
 ?> 
 
 <style>
@@ -143,19 +148,106 @@ if ($orderId && $payment->getMethod() == 'belluno_pix') :
         }
 
 </style>
-    <div class="payment-pix sucess-detalhes-pix">
-		<div class="titulo-pagar-pix">Fazer Pagamento Pix/QR Code:</div>
-		<div class="qrcode">
-			<img src="data:image/png;base64,<?=$pix['pix']['base64_image']?>">
-		</div>
-		<div class="total">
-            <span>Valor:</span><?php echo Mage::helper('core')->currency($total);?>
-        </div>
-		<div class="copyCode">
-			<input type="text" value="<?=$code;?>" id="pixTextBelluno">
-			<div class="fieldcopycode" onclick="copiarTextoPix(this)">Copiar</div>
-			<p class="info-expire">O QR Code expira em: <?php echo date('d/m/Y H:i:s', $pix_expires_at); ?>.<br/>
-			Você também pode fazer o pagamento na seção Minha Conta > Pedidos</p>
-		</div>
+<div class="payment-pix sucess-detalhes-pix">
+	<div class="titulo-pagar-pix">Fazer Pagamento Pix/QR Code:</div>
+	<div class="qrcode">
+		<img src="data:image/png;base64,<?=$pix['pix']['base64_image']?>">
 	</div>
+	<div class="total">
+		<span>Valor:</span><?php echo Mage::helper('core')->currency($total);?>
+	</div>
+	<div class="copyCode">
+		<input type="text" value="<?=$code;?>" id="pixTextBelluno">
+		<div class="fieldcopycode" onclick="copiarTextoPix(this)">Copiar</div>
+		<p class="info-expire">O QR Code expira em: <?php echo date('d/m/Y H:i:s', $pix_expires_at); ?>.<br/>
+		Você também pode fazer o pagamento na seção Minha Conta > Pedidos</p>
+	</div>
+</div>
+
+
+<style>
+	.payment-pix-paid {
+		width: 80%;
+		margin: auto;
+		display: block;
+	}
+
+	.payment-pix-paid .success {
+		width: 100%;
+		max-width:  150px;
+		margin: 30px auto;
+	}
+
+	.payment-pix-paid .success img {
+		width: 100%;
+	}
+	.payment-pix-paid .comment{
+		width:100%;
+		max-width: 700px;
+		margin: auto;
+		background:#dedddd;
+		padding: 20px;
+		border-radius: 10px
+	}
+	.payment-pix-paid .comment span{
+		color: #222;
+		font-family: sans-serif;
+		font-size: 16px;
+	}
+
+	.lds-dual-ring {
+		display: inline-block;
+		width: 80px;
+		height: 80px;
+	}
+	.lds-dual-ring:after {
+		content: " ";
+		display: block;
+		width: 64px;
+		height: 64px;
+		margin: 8px;
+		border-radius: 50%;
+		border: 6px solid #25ae88;
+		border-color: #25ae88 transparent #25ae88 transparent;
+		animation: lds-dual-ring 1.2s linear infinite;
+	}
+	@keyframes lds-dual-ring {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+</style>
+
+
+<div class="payment-pix-paid"></div>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('mageshop/belluno/js/websocket-belluno.js') ?>"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script> -->
+<script src='https://app.belluno.digital/pagess/plugins/Pusher/pusher-with-encryption.min.js'></script>
+<script src='https://app.belluno.digital/pagess/plugins/Pusher/pusher-with-encryption.worker.min.js'></script>
+<script src='https://app.belluno.digital/pagess/plugins/Echo/echo-without-module.js'></script>
+
+<script type="text/javascript">
+  $j(document).ready(function() {
+		window.Pusher = Pusher;
+		window.Echo = new Echo({
+			broadcaster: 'pusher',
+			key: 'ws_belluno',
+			wsHost: 'websocket.belluno.digital',
+			wsPort: 6001,
+			wssPort: 443,
+			forceTLS: true,
+			encrypted: true,
+			disableStats: true,
+			enabledTransports: ['ws', 'wss'],
+		});
+		window.Echo.channel('transaction.<?php echo $link_code;?>')
+			.listen('.TransactionPaid', (e) => {
+				paymentConfirmed('<?=$websocket?>')
+		});
+  });
+</script>
+
 <?php } endif; ?>
