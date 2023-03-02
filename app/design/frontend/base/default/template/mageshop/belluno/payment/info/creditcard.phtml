@@ -21,22 +21,3 @@ $title = $this->getMethod()->getTitle();
     <img src="<?php echo $imageIcon?>" alt="<?php echo $title; ?>" width="120px">
     <p><?php echo $title; ?></p>
 </div>
-<br>
-<?php
-
-if(!$order){
- return;   
-}
-$state = $order->getState();
-$payment = $order->getPayment();
-$method = $payment->getMethod();
-$url_store =  Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
-$transaction_id = isset($payment->getAdditional_information()['transaction_id']) ? $payment->getAdditional_information()['transaction_id'] : null;
-$total = $order->getGrandTotal();
-$state_pedding = array(
-    "new",
-    "pending_payment"
-);
-if($method == 'belluno_creditcard'): ?>
-
-<?php endif; ?>

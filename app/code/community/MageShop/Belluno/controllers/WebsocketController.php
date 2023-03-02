@@ -95,17 +95,17 @@ class MageShop_Belluno_WebsocketController extends MageShop_Belluno_Controller_A
 
     switch ($statusBelluno) {
         case self::BL_STATUS_PAID:
-            $this->_paid($order);
+            $this->_paid($order, $statusBelluno);
             $this->img_res_frontend = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) . self::IMAGE_PAYMENT_SUCCESS;
             $this->comment_res_frontend =  "O pagamento deste pedido foi confirmado com sucesso! 
             Seu produto será enviado em breve e você receberá um e-mail de confirmação assim que ele for despachado.
             Agradecemos a sua compra e ficamos à disposição para eventuais dúvidas ou problemas.";
         break;
         case self::BL_STATUS_CC_ANALYSIS:
-            $this->_review($order);
+            $this->_review($order, $statusBelluno);
         break;
         case self::BL_STATUS_CC_CLIENT_ANALYSIS:
-            $this->_holded($order);
+            $this->_holded($order, $statusBelluno);
         break;
         case self::BL_STATUS_REFUSED:
         case self::BL_STATUS_EXPIRED:
@@ -115,7 +115,7 @@ class MageShop_Belluno_WebsocketController extends MageShop_Belluno_Controller_A
         case self::BL_STATUS_BL_CL_BY_REQUEST:
         case self::BL_STATUS_BL_CL_REQUEST:
         case self::BL_STATUS_CC_EXPIRED_USER_ANALYSIS:
-            $this->_cancelled($order);
+            $this->_cancelled($order, $statusBelluno);
             $this->img_res_frontend = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) . self::IMAGE_PAYMENT_SUCCESS;
         break;
         default:

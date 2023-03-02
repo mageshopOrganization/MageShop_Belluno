@@ -5,7 +5,7 @@ async function paymentConfirmed(url){
         html_success.innerHTML = '<div class="lds-dual-ring"></div>';
         const data = await fetch(url);
         let res = await data.json();
-        if(res.response){
+        if(res.response == true){
             html_success.innerHTML = `
             <div class="success">
                 <img src="${res.img}">
@@ -13,6 +13,8 @@ async function paymentConfirmed(url){
             <div class="comment">
                 <span>${res.message}</span>
             </div>`;
+        }else{
+            window.location.reload();
         }
         
     } catch (error) {

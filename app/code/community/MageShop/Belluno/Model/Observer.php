@@ -52,4 +52,10 @@ class MageShop_Belluno_Model_Observer
             $connector->doRequest($request, "POST", "/transaction/$transactionId/refund");
         }
     }
+
+    /**Function to return class connector for requests */
+    public function getConnector()
+    {
+        return new MageShop_Belluno_Service_ApiBelluno();
+    }
 }

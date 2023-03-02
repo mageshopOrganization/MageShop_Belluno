@@ -33,10 +33,19 @@
     </checkout_onepage_index>
 
     <checkout_onepage_success translate="label">
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>mageshop/belluno/css/page_success.css</name></action>
+        </reference>
         <reference name="content">
             <reference name="checkout.success">
                 <block type="core/template" name="belluno.info" template="mageshop/belluno/checkout/success.phtml" />
             </reference>
         </reference>
     </checkout_onepage_success>
+
+    <sales_order_view>
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>mageshop/belluno/css/page_info.css</name></action>
+        </reference>
+    </sales_order_view>
 </layout>

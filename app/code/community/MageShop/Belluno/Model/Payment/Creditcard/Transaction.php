@@ -19,7 +19,17 @@ class MageShop_Belluno_Model_Payment_Creditcard_Transaction
 
         $response = $connector->doRequest($request, "POST", "/transaction");
         $response = json_decode($response, true);
-
+        $error =  "Algo não ocorreu bem. Por favor verifique suas informações.";
+        if(isset($response['message'])){
+            Mage::throwException($error);
+        }elseif(isset($response['errors'])){
+            $resError = current($response['errors']);
+            if(gettype($resError) == 'array'){
+                $error = current($resError);
+            }
+            Mage::throwException($error);
+        }
+        
         $info->setAdditionalInformation("transaction_id", $response['transaction']['transaction_id']);
         $info->setAdditionalInformation("value", $response['transaction']['value']);
         $info->setAdditionalInformation("status", $response['transaction']['status']);

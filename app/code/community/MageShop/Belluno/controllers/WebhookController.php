@@ -41,13 +41,13 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
         $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         switch ($status) {
             case self::BL_STATUS_PAID:
-                $this->_paid($order);
+                $this->_paid($order, $status);
             break;
             case self::BL_STATUS_CC_ANALYSIS:
-                $this->_review($order);
+                $this->_review($order, $status);
             break;
             case self::BL_STATUS_CC_CLIENT_ANALYSIS:
-                $this->_holded($order);
+                $this->_holded($order, $status);
             break;
             case self::BL_STATUS_REFUSED:
             case self::BL_STATUS_EXPIRED:
@@ -57,7 +57,7 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
             case self::BL_STATUS_BL_CL_BY_REQUEST:
             case self::BL_STATUS_BL_CL_REQUEST:
             case self::BL_STATUS_CC_EXPIRED_USER_ANALYSIS:
-                $this->_cancelled($order);
+                $this->_cancelled($order, $status);
             break;
         }
 
