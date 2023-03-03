@@ -16,6 +16,18 @@ class MageShop_Belluno_Model_Payment_Pix_Transaction
     $connector = $this->getConnector();
     $response = $connector->doRequest($request, "POST", "/v2/transaction/pix");
     $response = json_decode($response, true);
+
+    $error =  "Algo não ocorreu bem. Por favor verifique suas informações ou altere a forma de pagamento.";
+    if(isset($response['message'])){
+        Mage::throwException($error);
+    }elseif(isset($response['errors'])){
+        $resError = current($response['errors']);
+        if(gettype($resError) == 'array'){
+            $error = current($resError);
+        }
+        Mage::throwException($error);
+    }
+    
     $pix = [
       'id' => $response['transaction']['transaction_id'],
       'pix' => $response['transaction']['pix'],

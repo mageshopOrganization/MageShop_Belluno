@@ -36,13 +36,13 @@ if ($orderId && $payment->getMethod() == 'belluno_pix'):
 
 <div class="payment-pix-paid"></div>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('mageshop/belluno/js/websocket-belluno.js') ?>"></script>
-<!-- <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script> -->
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('mageshop/belluno/js/jquery/jquery-2.1.4.min.js') ?>"></script>
 <script src='https://app.belluno.digital/pagess/plugins/Pusher/pusher-with-encryption.min.js'></script>
 <script src='https://app.belluno.digital/pagess/plugins/Pusher/pusher-with-encryption.worker.min.js'></script>
 <script src='https://app.belluno.digital/pagess/plugins/Echo/echo-without-module.js'></script>
 
 <script type="text/javascript">
-  $j(document).ready(function() {
+  $belluno(document).ready(function() {
 		window.Pusher = Pusher;
 		window.Echo = new Echo({
 			broadcaster: 'pusher',
@@ -74,3 +74,77 @@ if ($orderId && $payment->getMethod() == 'belluno_pix'):
 		</div>
 	</div>
 <?php } endif; ?>
+
+
+<?php if ($payment->getMethod() == 'belluno_bankslip' && $payment->getAdditionalInformation("status") == 'Processing'):
+	$data = json_decode($payment->getAdditionalInformation('bankslip'), true);
+    $digitableLine = $data['digitable_line'];
+    $url = $data['url'];
+?>
+
+<style>
+    .button-belluno {
+        transition-duration: 0.4s;
+        background-color: white;
+        color: gray;
+        border: 1px solid gray;
+        padding: 8px 20px;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    .button-belluno:hover {
+        background-color: gray;
+        color: white;
+    }
+
+    .label-belluno {
+        height: 30px;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .border-belluno {
+		width: 80%;
+        border: 1px gray solid;
+		margin: auto;
+    }
+
+    .row {
+        display: inline-block;
+        align-items: center;
+		
+    }
+	.linhes {
+		margin: 20px 0px;
+	}
+	
+</style>
+
+<script>
+    function copyTextSucess() {
+    navigator.clipboard
+        .writeText(document.getElementById("text-digitableline").innerText)
+        .then(
+        function () {},
+        function () {}
+        );
+    }
+</script>
+    <div class="actions-toolbar flex">
+        <div class="linhes">
+            <h4>Linha digitável</h4>
+            <div class="flex">
+                <fieldset class="border-belluno">
+                    <p class="label-belluno" id="text-digitableline"><?= $digitableLine ?></p>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="btn-bankslip-download">
+        <input class="action primary button-belluno row" type="button" id="belluno_btn" onclick="window.open('<?= $url ?>');" value=" Imprimir boleto " />
+        <button class="button-belluno row" id="button-copy" onclick="copyTextSucess()">Copiar</button>
+    </div>
+    <br>
+<?php endif; ?>

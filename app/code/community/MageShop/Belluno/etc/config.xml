@@ -57,15 +57,27 @@
                 </connection>
             </belluno_read>
         </resources>
+
         <sales>
             <order>
                 <states>
-                    <pending_payment>
+                    <pending_payment translate="label">
                         <visible_on_front>1</visible_on_front>
                     </pending_payment>
                 </states>
             </order>
         </sales>
+    
+        <fieldsets>
+          <sales_convert_quote_payment>
+            <check_no>
+              <to_order_payment>*</to_order_payment>
+            </check_no>
+            <check_date>
+              <to_order_payment>*</to_order_payment>
+            </check_date>
+          </sales_convert_quote_payment>
+        </fieldsets>
 
         <events>
             <sales_order_save_before>
@@ -92,15 +104,6 @@
 
     <default>
         <payment>
-            <belluno_pix>
-                <model>belluno/payment_pix</model>
-                <active>1</active>
-                <title>PIX - via Belluno</title>
-                <sort_order>1</sort_order>
-                <order_status>pending</order_status>
-                <allowspecific>0</allowspecific>
-                <payment_action>order</payment_action>
-            </belluno_pix>
             <belluno_creditcard>
                 <model>belluno/payment_creditcard</model>
                 <active>1</active>
@@ -110,6 +113,24 @@
                 <allowspecific>0</allowspecific>
                 <payment_action>order</payment_action>
             </belluno_creditcard>
+            <belluno_bankslip>
+                <model>belluno/payment_bankslip</model>
+                <active>1</active>
+                <title>Boleto - via Belluno</title>
+                <sort_order>2</sort_order>
+                <order_status>pending</order_status>
+                <allowspecific>0</allowspecific>
+                <payment_action>order</payment_action>
+            </belluno_bankslip>
+            <belluno_pix>
+                <model>belluno/payment_pix</model>
+                <active>1</active>
+                <title>PIX - via Belluno</title>
+                <sort_order>3</sort_order>
+                <order_status>pending</order_status>
+                <allowspecific>0</allowspecific>
+                <payment_action>order</payment_action>
+            </belluno_pix>
         </payment>
     </default>
 

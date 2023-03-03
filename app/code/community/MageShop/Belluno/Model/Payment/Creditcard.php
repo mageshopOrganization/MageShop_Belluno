@@ -11,7 +11,16 @@ class MageShop_Belluno_Model_Payment_Creditcard extends Mage_Payment_Model_Metho
     protected $_isGateway = true;
     protected $_allowCurrencyCode = ["BRL"];
 
-
+    public function getTitle()
+    {
+        $title = Mage::getStoreConfig('payment/mageshop_belluno_creditcardpayment/title');
+        if (!$title) {
+            $title = $this->_getData('title');
+        }
+        return $title;
+        // Retorna o título do método de pagamento
+        
+    }
     /**
      * Method that will be executed instead of magento's authorize default
      * workflow
@@ -309,7 +318,7 @@ class MageShop_Belluno_Model_Payment_Creditcard extends Mage_Payment_Model_Metho
      */
     public function getUseTaxDocumentCapture()
     {
-        return Mage::getStoreConfig('payment/belluno_creditcardpayment/capture_tax');
+        return Mage::getStoreConfig('payment/mageshop_belluno_creditcardpayment/capture_tax');
     }
 
     /**Function to return class region code API */

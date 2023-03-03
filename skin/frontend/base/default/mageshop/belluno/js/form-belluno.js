@@ -125,9 +125,10 @@ async function updateKey() {
   let data = await fetch(`${window.origin}/belluno/hash`);
   data = await data.json();
   var rsapk = JSON.parse(data);
-  var cardNumber = document.getElementById("card_number").value;
-  var expiration = document.getElementById("expires_at").value.split("/");
-  var cardCvv = document.getElementById("card_cvv").value;
+  var cardNumber = document.getElementById("belluno_card_number").value;
+  var expiration = document.getElementById("belluno_expires_at").value.split("/");
+  var cardCvv = document.getElementById("belluno_card_cvv").value;
+
   var pk_saved = rsapk["rsa_public_key"].replace("\r\n", "");
   var querieString = `card_number=${cardNumber.replace(
     /\s/g,
@@ -137,9 +138,9 @@ async function updateKey() {
 
   var hashRSA = encryptRSA(pk_saved, querieString);
 
-  document.getElementById("card_hash").value = `${rsapk["id"]}_${hashRSA}`;
+  document.getElementById("belluno_card_hash").value = `${rsapk["id"]}_${hashRSA}`;
 
-  if(document.getElementById("card_hash").value == null) {
+  if(document.getElementById("belluno_card_hash").value == null) {
 	  alert('card_hash não pode ser vazio. Por favor, atualize a página e tente novamente!');
 	  throw new Error('card_hash não pode ser vazio. Por favor, atualize a página e tente novamente!');
   }
@@ -369,6 +370,28 @@ Validation.addAllThese([
         return false;
       } else {
         return true;
+      }
+    },
+  ],
+  [
+    "validate-expirymonth",
+    "Mês inválido. Verifique por favor",
+    function (v) {
+      if (v > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  ],
+  [
+    "validate-expiryyear",
+    "Ano inválido. Verifique por favor",
+    function (v) {
+      if (v > 0) {
+        return true;
+      } else {
+        return false;
       }
     },
   ],

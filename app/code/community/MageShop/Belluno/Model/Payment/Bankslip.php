@@ -1,10 +1,10 @@
 <?php
-class MageShop_Belluno_Model_Payment_Pix extends Mage_Payment_Model_Method_Abstract
+class MageShop_Belluno_Model_Payment_Bankslip extends Mage_Payment_Model_Method_Abstract
 {
   
-    protected $_code = 'belluno_pix';
-    protected $_formBlockType = 'belluno/form_pix';
-    protected $_infoBlockType = 'belluno/info_pix';
+    protected $_code = 'belluno_bankslip';
+    protected $_formBlockType = 'belluno/form_bankslip';
+    protected $_infoBlockType = 'belluno/info_bankslip';
 
     protected $_canOrder = true;
     protected $_isInitializeNeeded = true;
@@ -14,13 +14,14 @@ class MageShop_Belluno_Model_Payment_Pix extends Mage_Payment_Model_Method_Abstr
 
     public function getTitle()
     {
-        $title = Mage::getStoreConfig('payment/mageshop_belluno_pix/title');
+        $title = Mage::getStoreConfig('payment/mageshop_belluno_bankslippayment/title');
         if (!$title) {
             $title = $this->_getData('title');
         }
         return $title;
-        // Retorna o título do método de pagamento 
+        // Retorna o título do método de pagamento
     }
+
     /**
      * Method that will be executed instead of magento's authorize default
      * workflow
@@ -48,11 +49,9 @@ class MageShop_Belluno_Model_Payment_Pix extends Mage_Payment_Model_Method_Abstr
     public function authorize(Varien_Object $payment, $amount)
     {
       if ($this->canOrder()) {
-
         $info = $this->getInfoInstance();
-        $transaction = new MageShop_Belluno_Model_Payment_Pix_Transaction();
-        $transaction->transactionPix($payment, $amount, $info); // Processar a transação do PIX
-
+        $transaction = new MageShop_Belluno_Model_Payment_Bankslip_Transaction();
+        $transaction->transactionBankslip($payment, $amount, $info); // Processar a transação do PIX
         return $this;
       }
     }
@@ -190,7 +189,7 @@ class MageShop_Belluno_Model_Payment_Pix extends Mage_Payment_Model_Method_Abstr
      */
     public function getUseTaxDocumentCapture()
     {
-        return Mage::getStoreConfig('payment/mageshop_belluno_pix/capture_tax');
+        return Mage::getStoreConfig('payment/mageshop_belluno_bankslip/capture_tax');
     }
 
     /**
