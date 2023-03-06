@@ -206,7 +206,6 @@
                 },
                 debug: false // optional - default false
             });
-
             $belluno('select[name=belluno_expiryyear]').on('change', function(){
                 var expiry=$belluno('input[id="belluno_expires_at"]').val();
                 var expArray=expiry.split("/");
@@ -214,8 +213,8 @@
                 expiry=expArray[0]+"/"+expArray[1];
                 $belluno('input[id="belluno_expires_at"]').val(expiry);
                 $belluno('.jp-card-expiry').html(expiry);
+                verifyInputs();
             });
-            
             $belluno('select[name=belluno_expirymonth]').on('change', function(){
                 var expiry=$belluno('input[id="belluno_expires_at"]').val();
                 var expArray=expiry.split("/");
@@ -223,8 +222,8 @@
                 expiry=expArray[0]+"/"+expArray[1];
                 $belluno('input[id="belluno_expires_at"]').val(expiry);
                 $belluno('.jp-card-expiry').html(expiry);
+                verifyInputs();
             });
-
             $belluno('input[id="belluno_card_number"]').on('change', function(){
                 verifyInputs();
             });
@@ -234,7 +233,6 @@
             $belluno('input[id="belluno_card_cvv"]').on('change', function(){
                 verifyInputs();
             });
-            
             const verifyInputs = () => {
                 var field_numbe = $belluno('input[id="belluno_card_number"]').val();
                 var field_expires =  $belluno('input[id="belluno_expires_at"]').val();
@@ -252,8 +250,6 @@
                 updateKey();
                 return true;
             }
-
-           
         })
     })();
 
@@ -289,6 +285,5 @@
         });
     }
     bellunoInit();
-   
 </script>
 </fieldset>
