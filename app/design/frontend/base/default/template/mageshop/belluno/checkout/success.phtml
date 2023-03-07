@@ -2,6 +2,7 @@
 $orderId = Mage::getSingleton("checkout/session")->getLastOrderId();
 $order = Mage::getModel("sales/order")->load($orderId);
 $payment = $order->getPayment();
+$helper = Mage::helper("belluno");
 if ($orderId && $payment->getMethod() == 'belluno_pix'):
    $status = $payment->getAdditionalInformation("status");
    $total = $order->getGrandTotal();  
@@ -33,14 +34,13 @@ if ($orderId && $payment->getMethod() == 'belluno_pix'):
 		Você também pode fazer o pagamento na seção Minha Conta > Pedidos</p>
 	</div>
 </div>
-
+<?php if($helper->getWebsocket() == '1'): ?>
 <div class="payment-pix-paid"></div>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('mageshop/belluno/js/websocket-belluno.js') ?>"></script>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('mageshop/belluno/js/jquery/jquery-2.1.4.min.js') ?>"></script>
 <script src='https://app.belluno.digital/pagess/plugins/Pusher/pusher-with-encryption.min.js'></script>
 <script src='https://app.belluno.digital/pagess/plugins/Pusher/pusher-with-encryption.worker.min.js'></script>
 <script src='https://app.belluno.digital/pagess/plugins/Echo/echo-without-module.js'></script>
-
 <script type="text/javascript">
   $belluno(document).ready(function() {
 		window.Pusher = Pusher;
@@ -61,7 +61,7 @@ if ($orderId && $payment->getMethod() == 'belluno_pix'):
 		});
   });
 </script>
-
+<?php endif; ?>
 <?php }elseif(  $status == "Paid" ){ ?>
 	<div class="payment-pix-paid">
 		<div class="success">
@@ -85,29 +85,33 @@ if ($orderId && $payment->getMethod() == 'belluno_pix'):
 <style>
     .button-belluno {
         transition-duration: 0.4s;
-        background-color: white;
-        color: gray;
-        border: 1px solid gray;
+        background-color: #01478c;
+        color: white;
+        border: 1px solid #01478c;
         padding: 8px 20px;
         border-radius: 8px;
         font-size: 16px;
     }
-
     .button-belluno:hover {
-        background-color: gray;
-        color: white;
+        background-color: #023262;
+        border: 1px solid #023262;
+        color: #FFF;
     }
 
     .label-belluno {
         height: 30px;
         font-size: 16px;
         text-align: center;
+        background: #dddada;
+        color: #43478c;
+        font-weight: 700;
+        margin: 0px 21px;
     }
 
     .border-belluno {
-		width: 80%;
-        border: 1px gray solid;
-		margin: auto;
+        width: auto;
+        margin: auto;
+        display: table;
     }
 
     .row {

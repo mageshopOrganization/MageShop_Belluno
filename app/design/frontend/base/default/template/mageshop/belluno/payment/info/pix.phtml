@@ -3,6 +3,7 @@ $baseUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
 $imageIcon = $baseUrl . 'media/mageshop/belluno/images/icon-pix.png';
 $order = $this->getInfo()->getOrder();
 $title = $this->getMethod()->getTitle();
+$helper = Mage::helper("belluno");
 ?>
 <style>
 .pixpayment_belluno {
@@ -57,7 +58,7 @@ if(isset($pix) && $status == 'Open' && !$order->hasInvoices()):
             <div class="fieldcopycode" onclick="copiarTextoPix(this)">Copiar</div>
         </div>
     </div>
-
+    <?php if($helper->getWebsocket() == '1'): ?>
     <div class="payment-pix-paid"></div>
     <script type="text/javascript" src="<?php echo $this->getSkinUrl('mageshop/belluno/js/websocket-belluno.js') ?>"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script> -->
@@ -85,6 +86,6 @@ if(isset($pix) && $status == 'Open' && !$order->hasInvoices()):
             });
     });
     </script>
-
     <?php endif; ?>
+  <?php endif; ?>
 <?php endif; ?>

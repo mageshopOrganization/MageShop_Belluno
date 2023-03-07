@@ -89,17 +89,18 @@
                         <input type="text" id="belluno_card_cvv" placeholder="&bull;&bull;&bull;" class="input-text required-entry validate-cvv" name="payment[cc_cvv]" maxlength="4" autocomplete="off"/>
                     </div>
                 </li>
-
-                <li class="wide">
-                    <label for="belluno_card_holder_document" class="required"><?php echo $helper->__("CPF/CNPJ do titular do cartão") ?><em>*</em></label>
-                    <div class="input-box">
-                        <input type="text" id="belluno_card_holder_document" 
-                        placeholder="<?php echo $helper->__("Digite aqui") ?>" class="input-text required-entry validate-document" 
-                        name="payment[card_holder_document]" 
-                        onkeyup="maskDocument(this)" 
-                        maxlength="18" autocomplete="off"/>
-                    </div>
-                </li>
+                <?php if ($captureTax == true) : ?>
+                    <li class="wide">
+                        <label for="belluno_card_holder_document" class="required"><?php echo $helper->__("CPF/CNPJ do titular do cartão") ?><em>*</em></label>
+                        <div class="input-box">
+                            <input type="text" id="belluno_card_holder_document" 
+                            placeholder="<?php echo $helper->__("Digite aqui") ?>" class="input-text required-entry validate-document" 
+                            name="payment[card_holder_document]" 
+                            onkeyup="maskDocument(this)" 
+                            maxlength="18" autocomplete="off"/>
+                        </div>
+                    </li>
+                <?php endif; ?>
                 <li class="fields">
                     <div class="cardholder-data">
                         <div class="field cardholder-card_holder_birth">
