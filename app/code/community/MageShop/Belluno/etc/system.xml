@@ -49,7 +49,7 @@
           </fields>
         </mageshop_belluno_custompayment>
 
-        <mageshop_belluno_creditcardpayment translate="label" module="belluno">
+        <belluno_creditcard translate="label" module="belluno">
         <label>Belluno Cartão de Crédito</label>
         <frontend_type>text</frontend_type>
         <sort_order>101</sort_order>
@@ -75,6 +75,15 @@
             <show_in_store>1</show_in_store>
             <validate>required-entry</validate>
           </title>
+          <order_status translate="label">
+            <label>New Order Status</label>
+            <frontend_type>select</frontend_type>
+            <source_model>adminhtml/system_config_source_order_status</source_model>
+            <sort_order>25</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>0</show_in_store>
+          </order_status>
           <installments translate="label">
             <label>Número de parcelas</label>
             <frontend_type>text</frontend_type>
@@ -112,9 +121,9 @@
             <show_in_store>0</show_in_store>
           </capture_tax>
         </fields>
-      </mageshop_belluno_creditcardpayment>
+      </belluno_creditcard>
 
-      <mageshop_belluno_bankslippayment translate="label" module="belluno">
+      <belluno_bankslip translate="label" module="belluno">
         <label>Belluno Boleto</label>
         <frontend_type>text</frontend_type>
         <sort_order>102</sort_order>
@@ -140,6 +149,15 @@
             <show_in_store>1</show_in_store>
             <validate>required-entry</validate>
           </title>
+          <order_status translate="label">
+            <label>New Order Status</label>
+            <frontend_type>select</frontend_type>
+            <source_model>adminhtml/system_config_source_order_status</source_model>
+            <sort_order>25</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>0</show_in_store>
+          </order_status>
           <days_expiration translate="label">
             <label>Dias para Vencimento</label>
             <frontend_type>text</frontend_type>
@@ -160,10 +178,10 @@
             <show_in_store>0</show_in_store>
           </capture_tax>
         </fields>
-      </mageshop_belluno_bankslippayment>
+      </belluno_bankslip>
 
 
-      <mageshop_belluno_pix translate="label" module="belluno">
+      <belluno_pix translate="label" module="belluno">
           <label>PIX - via Belluno</label>
           <frontend_type>text</frontend_type>
           <sort_order>103</sort_order>
@@ -218,7 +236,7 @@
               <show_in_store>0</show_in_store>
             </capture_tax>
           </fields>
-        </mageshop_belluno_pix>
+        </belluno_pix>
       </groups>
     </payment>
   </sections>

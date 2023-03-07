@@ -64,9 +64,9 @@ class MageShop_Belluno_Block_Form_Creditcard extends Mage_Payment_Block_Form
      */
     public function getInstallments($total)
     {
-      $maxInstallments = Mage::getStoreConfig('payment/mageshop_belluno_creditcardpayment/installments');
-      $minValueInstalment = Mage::getStoreConfig('payment/mageshop_belluno_creditcardpayment/min_installment');
-      $dataInterest = Mage::getStoreConfig('payment/mageshop_belluno_creditcardpayment/installment_interest');
+      $maxInstallments = Mage::getStoreConfig('payment/belluno_creditcard/installments');
+      $minValueInstalment = Mage::getStoreConfig('payment/belluno_creditcard/min_installment');
+      $dataInterest = Mage::getStoreConfig('payment/belluno_creditcard/installment_interest');
       $dataInterest = unserialize($dataInterest);
       foreach ($dataInterest as $key => $value) {
         $installmentInterest[] = $value['from_qty'];
@@ -146,7 +146,7 @@ class MageShop_Belluno_Block_Form_Creditcard extends Mage_Payment_Block_Form
   
     public function getFieldCaptureTax()
     {
-      $captureTax = Mage::getStoreConfig('payment/mageshop_belluno_creditcardpayment/capture_tax');
+      $captureTax = Mage::getStoreConfig('payment/belluno_creditcard/capture_tax');
       if ($captureTax == true) {
         return true;
       } else {

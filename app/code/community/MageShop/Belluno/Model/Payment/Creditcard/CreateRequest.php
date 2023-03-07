@@ -209,8 +209,8 @@ class MageShop_Belluno_Model_Payment_Creditcard_CreateRequest
      */
     public function getValueWithInterest($totalValue, $installmentNumber): array
     {
-        $interest = Mage::getStoreConfig('payment/mageshop_belluno_creditcardpayment/installment_interest');
-        $maxInstallment = Mage::getStoreConfig('payment/mageshop_belluno_creditcardpayment/installments');
+        $interest = Mage::getStoreConfig('payment/belluno_creditcard/installment_interest');
+        $maxInstallment = Mage::getStoreConfig('payment/belluno_creditcard/installments');
 
         $interest = unserialize($interest);
         $valueInterest = 0;
@@ -361,7 +361,7 @@ class MageShop_Belluno_Model_Payment_Creditcard_CreateRequest
      */
     public function getUseTaxDocumentCapture()
     {
-        return Mage::getStoreConfig('payment/mageshop_belluno_creditcardpayment/capture_tax');
+        return Mage::getStoreConfig('payment/belluno_creditcard/capture_tax');
     }
 
     /**Function to return class region code API */

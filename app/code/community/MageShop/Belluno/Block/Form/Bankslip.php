@@ -8,7 +8,7 @@ class MageShop_Belluno_Block_Form_Bankslip extends Mage_Payment_Block_Form {
   }
 
   public function getFieldCaptureTax() {
-    $captureTax = Mage::getStoreConfig('payment/mageshop_belluno_bankslippayment/capture_tax');
+    $captureTax = Mage::getStoreConfig('payment/belluno_bankslip/capture_tax');
     if ($captureTax == true) {
       return true;
     } else {

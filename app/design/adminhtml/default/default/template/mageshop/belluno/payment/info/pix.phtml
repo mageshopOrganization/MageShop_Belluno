@@ -14,7 +14,8 @@ $pix = json_decode($payment->getAdditional_information()['pix'], true);
 $pix_expires_at = isset($pix['pix']['expires_at']) ? Mage::getModel('core/date')->timestamp($pix['pix']['expires_at']) : 0; 
 $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
 $transaction_id = isset($pix['id']) ? $pix['id'] : null;
-if(isset($pix) && $currentTimestamp <= $pix_expires_at):
+$status = $payment->getAdditionalInformation("status");
+if(isset($pix) && $status == 'Open' && !$order->hasInvoices()):
 $code = base64_decode($pix['pix']['base64_text']); 
 ?>
 <style>

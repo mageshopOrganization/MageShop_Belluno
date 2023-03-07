@@ -13,13 +13,12 @@ class MageShop_Belluno_Model_Payment_Creditcard extends Mage_Payment_Model_Metho
 
     public function getTitle()
     {
-        $title = Mage::getStoreConfig('payment/mageshop_belluno_creditcardpayment/title');
+        $title = Mage::getStoreConfig('payment/belluno_creditcard/title');
         if (!$title) {
             $title = $this->_getData('title');
         }
         return $title;
         // Retorna o título do método de pagamento
-        
     }
     /**
      * Method that will be executed instead of magento's authorize default

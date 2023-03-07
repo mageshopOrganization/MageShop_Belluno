@@ -120,7 +120,7 @@ class MageShop_Belluno_Model_Payment_Bankslip_CreateRequest {
       ],
       self::CART => $array,
       self::POSTBACK => [
-        self::URL => Mage::getBaseUrl() . 'magento19/postback'
+        self::URL => Mage::getBaseUrl() . 'belluno/webhook/postback'
       ]
     ];
     $request = json_encode($request);
@@ -148,7 +148,7 @@ class MageShop_Belluno_Model_Payment_Bankslip_CreateRequest {
    * Function to get days of expiration
    */
   public function getDUE() {
-    $days = Mage::getStoreConfig('payment/mageshop_belluno_bankslippayment/days_expiration');
+    $days = Mage::getStoreConfig('payment/belluno_bankslip/days_expiration');
     $today = getdate();
     $date = new DateTime($today['year'] . '-' . $today['mon'] . '-' . $today['mday']);
     $date->add(new DateInterval('P' . $days . 'D'));
@@ -159,7 +159,7 @@ class MageShop_Belluno_Model_Payment_Bankslip_CreateRequest {
    * Function to get tax document
    */
   public function getUseTaxDocumentCapture() {
-    return Mage::getStoreConfig('payment/mageshop_belluno_bankslippayment/capture_tax');
+    return Mage::getStoreConfig('payment/belluno_bankslip/capture_tax');
   }
 
   /**

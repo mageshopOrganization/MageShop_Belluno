@@ -15,7 +15,7 @@ class MageShop_Belluno_Model_Payment_Pix extends Mage_Payment_Model_Method_Abstr
 
     public function getTitle()
     {
-        $title = Mage::getStoreConfig('payment/mageshop_belluno_pix/title');
+        $title = Mage::getStoreConfig('payment/belluno_pix/title');
         if (!$title) {
             $title = $this->_getData('title');
         }

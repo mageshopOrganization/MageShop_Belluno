@@ -8,7 +8,7 @@ class MageShop_Belluno_Helper_Data extends Mage_Core_Helper_Abstract
     const MS_BELLUNO_BASE_URL = "payment/mageshop_belluno_custompayment/base_url";
     const MS_BELLUNO_SANDBOX = "https://ws-sandbox.bellunopag.com.br";
     const MS_BELLUNO_API = "https://api.belluno.digital";
-    const MS_BELLUNO_WEBSOCKET_PIX = "payment/mageshop_belluno_pix/websocket";
+    const MS_BELLUNO_WEBSOCKET_PIX = "payment/belluno_pix/websocket";
 
     public function getToken()
     {

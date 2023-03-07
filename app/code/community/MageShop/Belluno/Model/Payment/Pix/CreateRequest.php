@@ -146,7 +146,7 @@ class MageShop_Belluno_Model_Payment_Pix_CreateRequest {
    * Function to get tax document
    */
   public function getUseTaxDocumentCapture() {
-    return Mage::getStoreConfig('payment/mageshop_belluno_pix/capture_tax');
+    return Mage::getStoreConfig('payment/belluno_pix/capture_tax');
   }
 
   /**

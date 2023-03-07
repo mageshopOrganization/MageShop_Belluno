@@ -19,7 +19,7 @@ class MageShop_Belluno_Model_Payment_Bankslip extends Mage_Payment_Model_Method_
      */
     public function getTitle()
     {
-        $title = Mage::getStoreConfig('payment/mageshop_belluno_bankslippayment/title');
+        $title = Mage::getStoreConfig('payment/belluno_bankslip/title');
         if (!$title) {
             $title = $this->_getData('title');
         }
