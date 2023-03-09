@@ -146,7 +146,7 @@ class MageShop_Belluno_Model_Payment_Creditcard_CreateRequest
         }
         if ($shippingValue > 0) {
             $array[] = [
-                self::PRODUCT_NAME => 'Shipping',
+                self::PRODUCT_NAME => 'Envio',
                 self::QUANTITY => '1',
                 self::UNIT_VALUE => $shippingValue
             ];

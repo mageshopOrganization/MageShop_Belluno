@@ -81,6 +81,7 @@ class MageShop_Belluno_ConsultController extends MageShop_Belluno_Controller_Abs
 
     switch ($statusBelluno) {
         case self::BL_STATUS_PAID:
+            parent::payments($this->resulstApi);
             $this->_paid($order, $statusBelluno);
         break;
         case self::BL_STATUS_CC_ANALYSIS:

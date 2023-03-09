@@ -4,9 +4,6 @@
 $order = $this->getInfo()->getOrder();
 $payment = $order->getPayment();
 $method = $payment->getMethod();
-if($method !== 'belluno_pix'){
-    return false;
-}
 $url_store =  Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
 $transaction_id = isset($payment->getAdditional_information()['transaction_id']) ? $payment->getAdditional_information()['transaction_id'] : null;
 $total = $order->getGrandTotal();

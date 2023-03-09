@@ -1,8 +1,11 @@
 <?php
 
-class MageShop_Belluno_Model_Payment_Pix_CreateRequest {
+class MageShop_Belluno_Model_Payment_Link_CreateRequest {
 
   const VALUE = 'value';
+  const CAPTURE = 'capture';
+  const PAYMENT_METHODS = 'payment_methods';
+  const INSTALLMENT_NUMBER = 'installment_number';
   const CLIENT = 'client';
   const NAME = 'client_name';
   const DOCUMENT = 'client_document';
@@ -26,39 +29,36 @@ class MageShop_Belluno_Model_Payment_Pix_CreateRequest {
 
   /**
    * Function to create request
-   * @param $data
-   * @param $info
+   * @param $payment
    * @return string
    */
-  public function createRequest($data, $info) {
-    $quote = $this->getQuote();
-    $customerId = $quote->getCustomerId();
-    $billingAddress = $quote->getBillingAddress();
-
+  public function createRequest($payment) {
+    $order = $payment->getOrder();
+    $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+    $billingAddress = $order->getBillingAddress();
     //body request
-    $value = $quote->getBaseGrandTotal();
-    $documentCode = $quote->getReservedOrderId();
+    $value = $order->getBaseGrandTotal();
+    // verifica se foi definido o id_increment
+    if(!$order->getReservedOrderId()){
+      $order->setReservedOrderId($order->getIncrementId());
+    }
+
+    $documentCode = $order->getReservedOrderId();
     //client
-    $clientName = $quote->getCustomerFirstname() . ' ' . $quote->getCustomerLastname();
-
+    $clientName = $customer->getName();
     if(strlen($clientName) > 100){
-       $clientName = $quote->getCustomerFirstname();
+       $clientName = $customer->getCustomerFirstname();
     }
-
-    $taxDocument = $this->getUseTaxDocumentCapture();
-    if ($taxDocument == true) {
-      $clientDocument = $data['client_document'];
-    } else {
-      $clientDocument = $this->getTaxVat($customerId);
-      $clientDocument = $this->formatCpfCnpj($clientDocument);
-    }
+    $clientDocument = $customer->getData('taxvat');
+    $clientDocument = $this->formatCpfCnpj($clientDocument);
+    
     if (empty($clientDocument)) {
-      $clientDocument = $quote->getCustomerTaxvat();
+      $clientDocument = $customer->getCustomerTaxvat();
       $clientDocument = $this->formatCpfCnpj($clientDocument);
     }
-
-    $clientEmail = $quote->getCustomerEmail();
+    $clientEmail = $customer->getEmail();
     $clientPhone = $billingAddress->getTelephone();
+    $capture = $this->getRuleCapture();
     //billing
     $postalCode = $billingAddress->getPostcode();
     $postalCode = preg_replace('/[^0-9]/is', '', $postalCode);
@@ -70,10 +70,9 @@ class MageShop_Belluno_Model_Payment_Pix_CreateRequest {
     $state = $this->getRegionCodeAPI()->getRegionCode($billingAddress->getRegion());
     $country = $billingAddress->getCountryId();
     //cart
-    $items = $quote->getAllItems();
-    $subTotal = $quote->getSubtotal();
+    $items = $order->getAllItems();
+    $subTotal = $order->getSubtotal();
     $shippingValue = $value - $subTotal;
-
     foreach ($items as $item) {
       if ($item->getProductType() == 'simple' || $item->getProductType() == 'grouped') {
         if ($item->getPrice() == 0) {
@@ -82,23 +81,24 @@ class MageShop_Belluno_Model_Payment_Pix_CreateRequest {
         } else {
           $price = $item->getPrice();
         }
-        $array[] = [
+        $cart[] = [
           self::PRODUCT_NAME => $item->getName(),
-          self::QUANTITY => $item->getQty(),
+          self::QUANTITY => $item->getQtyOrdered(),
           self::UNIT_VALUE => $price
         ];
       }
     }
     if ($shippingValue > 0) {
-      $array[] = [
-        self::PRODUCT_NAME => 'Envio',
+      $cart[] = [
+        self::PRODUCT_NAME => "Envio",
         self::QUANTITY => '1',
         self::UNIT_VALUE => $shippingValue
       ];
     }
-   
     $request['transaction'] = [
       self::VALUE => $value,
+      self::CAPTURE => $capture,
+      self::PAYMENT_METHODS => $this->getPaymentMethodsSelect(),
       self::NAME => $clientName,
       self::DOCUMENT => $clientDocument,
       self::EMAIL => $clientEmail,
@@ -113,40 +113,24 @@ class MageShop_Belluno_Model_Payment_Pix_CreateRequest {
         self::STATE => $state,
         self::COUNTRY => $country
       ],
-      self::CART => $array,
+      self::CART => $cart,
       self::POSTBACK => [
         self::URL => Mage::getBaseUrl() . 'belluno/webhook/postback'
       ]
     ];
     $request = json_encode($request);
-    $info->setAdditionalInformation("data", $request);
+    $order->setAdditionalInformation("data", $request);
     return $request;
   }
 
-  /** 
-   * Get checkout session 
-   * @return Mage_Checkout_Model_Session
-   */
-  public function getCheckout() {
-    return Mage::getSingleton('checkout/session');
-  }
 
   /**
-   * Get current quote
-   * @return Mage_Sales_Model_Quote
+   * Function to get rule capture
    */
-  public function getQuote() {
-    return $this->getCheckout()->getQuote();
+  public function getRuleCapture()
+  {
+      return 1;
   }
-
-
-  /**
-   * Function to get tax document
-   */
-  public function getUseTaxDocumentCapture() {
-    return Mage::getStoreConfig('payment/belluno_pix/capture_tax');
-  }
-
   /**
    * Function to format cpf and cnpj
    */
@@ -175,16 +159,15 @@ class MageShop_Belluno_Model_Payment_Pix_CreateRequest {
     }
   }
 
-  /**
-   * Function to get TaxVat
-   * @param $customerId
-   */
-  public function getTaxVat($customerId) {
-    $customer = Mage::getModel('customer/customer')->load($customerId);
-    $vatNumber = $customer->getData('taxvat');
-    return $vatNumber;
+  public function getPaymentMethodsSelect()
+  {
+    $res = [1,2];
+    $payment_method = Mage::getStoreConfig("payment/belluno_link/payment_methods");
+    if(strlen($payment_method) > 0 && !empty($payment_method)){
+      $res = array_filter(explode(",", $payment_method));
+    }
+    return $res;
   }
-
   /**Function to return class region code API */
   public function getRegionCodeAPI() {
     return new MageShop_Belluno_Validations_RegionCodeAPI();

@@ -33,8 +33,11 @@ class MageShop_Belluno_Controller_AbstractController extends Mage_Core_Controlle
         $additionalInformation = $payment->getAdditionalInformation();
         $additionalInformation['status'] = $statusBelluno;
         $payment->setAdditionalInformation($additionalInformation);
-
         $commentInvoice = 'Gateway Belluno Digital: ' . Mage::getModel('core/date')->gmtDate('Y-m-d H:i:s') . ' | '. $this->getReason();
+        if(empty($this->getReason())){
+            $this->setReason($commentInvoice);
+        }
+        
         // Create the invoice
         $invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
         $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_OFFLINE);
@@ -43,12 +46,13 @@ class MageShop_Belluno_Controller_AbstractController extends Mage_Core_Controlle
         $transactionSave = Mage::getModel('core/resource_transaction')
             ->addObject($invoice)
             ->addObject($invoice->getOrder());
-        $invoice->addComment($commentInvoice, true, true);
+        $invoice->addComment( (string) $this->getReason() , true, true);
         $invoice->save();
         $transactionSave->save();
 
         $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true);
         $order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING, true);
+        $order->addStatusHistoryComment( (string) $this->getReason() , false);
         $order->save();
     }
 
@@ -124,4 +128,65 @@ class MageShop_Belluno_Controller_AbstractController extends Mage_Core_Controlle
         $order->save();
     }
 
+    protected function payments($postback)
+    {
+        if(isset($postback['transaction']) && count($postback['transaction']) > 0){
+           $payments = $postback['transaction']['payments'];
+           if(isset($payments[0]) && count($payments[0]) > 0){
+                switch ($payments[0]['type']) {
+                    case 'pix':
+                        $this->transactionPix($payments[0]);
+                    break;
+                    case 'card':
+                        $this->transactionCard($payments[0]);
+                    break;
+                }
+           }
+        }else if(isset($postback['bankslip']) && count($postback['bankslip']) > 0){
+            if(isset($postback['bankslip']['payment']) && count($postback['bankslip']['payment']) > 0){
+                $this->bankslip($postback['bankslip']['payment']);
+            }
+        }
+    }
+
+    private function transactionCard($payment)
+    {
+        $message = "Informamos que o pagamento foi concluído com sucesso. Segue abaixo os detalhes do pagamento:\n\n";
+        $message .= "Cartão: " . $payment['card'] . "<br>";
+        $message .= "Bandeira: " . $payment['brand'] . "<br>";
+        $message .= "Número de parcelas: " . $payment['installments_number'] . "<br>";
+        $message .= "Código de autorização: " . $payment['cod_aut'] . "<br>";
+        $message .= "NSU do pagamento: " . $payment['nsu_payment'] . "<br>";
+        $message .= "Data de pagamento: " . $payment['paid_at'] . "<br>";
+        $this->setReason($message);
+    }
+
+    private function transactionPix($payment)
+    {
+        $message = "Informamos que o pagamento foi concluído com sucesso. Segue abaixo os detalhes do pagamento:<br>";
+        $message .= "Tipo de pagamento: " . $payment['type'] . "<br>";
+        $message .= "Código: " . $payment['pix_code'] . "<br>";
+        $message .= "Valor pago: R$ " . number_format($payment['value'], 2, ',', '.') . "<br>";
+        $message .= "Taxa: R$ " . number_format($payment['fee'], 2, ',', '.') . "<br>";
+        $message .= "Valor líquido: R$ " . number_format($payment['net_value'], 2, ',', '.') . "<br>";
+        $message .= "Beneficiário: " . $payment['payee']['name'] . " - " . $payment['payee']['document'] . "<br>";
+        $message .= "Data de pagamento: " . date('d/m/Y \à\s H:i:s', strtotime($payment['paid_at'])) . "<br>";
+        $this->setReason($message);
+    }
+
+    private function bankslip($payment)
+    {
+        $message = "Informamos que o pagamento foi concluído com sucesso. Segue abaixo os detalhes do pagamento:<br>";
+        $message .= "Data do pagamento: " . date('d/m/Y', strtotime($payment['payment_date'])) . "<br>";
+        $message .= "Data de transferência: " . date('d/m/Y', strtotime($payment['transfer_date'])) . "<br>";
+        $message .= "Lote de transferência: " . $payment['transfer_batch'] . "<br>";
+        $message .= "Valor do pagamento: R$ " . number_format($payment['value'], 2, ',', '.') . "\n";
+        $message .= "Juros: R$ " . number_format($payment['interest'], 2, ',', '.') . "<br>";
+        $message .= "Multa: R$ " . number_format($payment['fine'], 2, ',', '.') . "<br>";
+        $message .= "Desconto: R$ " . number_format($payment['discount'], 2, ',', '.') . "<br>";
+        $message .= "Valor pago: R$ " . number_format($payment['paid_value'], 2, ',', '.') . "<br>";
+        $message .= "Taxa de boleto: R$ " . number_format($payment['bankslip_fee'], 2, ',', '.') . "<br>";
+        $message .= "Valor líquido: R$ " . number_format($payment['net_value'], 2, ',', '.') . "<br>";
+        $this->setReason($message);
+    }
 }

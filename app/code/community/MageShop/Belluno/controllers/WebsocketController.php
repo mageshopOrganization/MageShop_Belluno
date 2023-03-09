@@ -95,6 +95,7 @@ class MageShop_Belluno_WebsocketController extends MageShop_Belluno_Controller_A
 
     switch ($statusBelluno) {
         case self::BL_STATUS_PAID:
+            parent::payments($this->resulstApi);
             $this->_paid($order, $statusBelluno);
             $this->img_res_frontend = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) . self::IMAGE_PAYMENT_SUCCESS;
             $this->comment_res_frontend =  "O pagamento deste pedido foi confirmado com sucesso! 

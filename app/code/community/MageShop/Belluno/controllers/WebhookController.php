@@ -41,6 +41,7 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
         $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         switch ($status) {
             case self::BL_STATUS_PAID:
+                parent::payments($data);
                 $this->_paid($order, $status);
             break;
             case self::BL_STATUS_CC_ANALYSIS:
@@ -62,5 +63,5 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
         }
 
     }
-
+    
 }
