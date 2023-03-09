@@ -9,6 +9,7 @@ $transaction_id = isset($payment->getAdditional_information()['transaction_id'])
 $total = $order->getGrandTotal();
 $viewJson = $payment->getAdditional_information('view'); 
 $viewData = json_decode($viewJson, true);
+$imageIcon = $url_store . 'media/mageshop/belluno/images/belluno.png';
 ?>
 <style>
     .col {
@@ -25,6 +26,9 @@ $viewData = json_decode($viewJson, true);
 </style>
 <br>
 <div class="box-creditcard">
+    <div class="banner" style="background-image: url('<?php echo $imageIcon?>');"></div>
+    <h3><?= Mage::helper('core')->__("Cartão de Crédito - Belluno") ?></h3>
+
     <h2><?= "Informações do pagamento:" ?></h2>
     <?php
     $num = 0;
@@ -57,6 +61,23 @@ $viewData = json_decode($viewJson, true);
         background:#f5854b;
         color:#FFF;
     }
+    .box-creditcard .banner {
+        width: 100%;
+        max-width: 245px;
+        height: 60px;
+        background-size: 243px;
+        background-repeat: no-repeat;
+    }
+    .box-creditcard h3 {
+        color: #005aad;
+        text-align: left;
+        font-weight: 700;
+        font-size: 17px;
+        border-bottom: 1px solid;
+        padding-left: 10px;
+        width: auto;
+    }
+
 </style>
 
 <?php endif; ?>

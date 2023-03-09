@@ -12,6 +12,7 @@ $pix_expires_at = isset($pix['pix']['expires_at']) ? Mage::getModel('core/date')
 $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
 $transaction_id = isset($pix['id']) ? $pix['id'] : null;
 $status = $payment->getAdditionalInformation("status");
+$imageIcon = $url_store . 'media/mageshop/belluno/images/belluno.png';
 if(isset($pix) && $status == 'Open' && !$order->hasInvoices()):
 $code = base64_decode($pix['pix']['base64_text']); 
 ?>
@@ -154,7 +155,10 @@ $code = base64_decode($pix['pix']['base64_text']);
 
 </div>
 <?php else: ?>
-    <div> <b><?= Mage::helper('core')->__("Belluno - Pix") ?></b></div>
+    <div class="pix-close">
+        <div class="banner" style="background-image: url('<?php echo $imageIcon?>');"></div>
+        <h3><?= Mage::helper('core')->__("Belluno - Pix") ?></h3>
+    </div>
 <?php endif; ?>
 
 
@@ -172,6 +176,23 @@ $code = base64_decode($pix['pix']['base64_text']);
         background:#f5854b;
         color:#FFF;
     }
+    .pix-close .banner {
+        width: 100%;
+        max-width: 245px;
+        height: 60px;
+        background-size: 243px;
+        background-repeat: no-repeat;
+    }
+    .pix-close h3 {
+        color: #005aad;
+        text-align: left;
+        font-weight: 700;
+        font-size: 17px;
+        border-bottom: 1px solid;
+        padding-left: 10px;
+        width: auto;
+    }
+
 </style>
 
 <?php endif; ?>

@@ -6,6 +6,7 @@ $method = $payment->getMethod();
 $url_store =  Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
 $transaction_id = isset($payment->getAdditional_information()['transaction_id']) ? $payment->getAdditional_information()['transaction_id'] : null;
 $total = $order->getGrandTotal();
+$imageIcon = $url_store . 'media/mageshop/belluno/images/belluno.png';
 if ($method == 'belluno_bankslip') : 
     $dataBankslip = $payment->getAdditional_information('bankslip');
     if($dataBankslip){
@@ -17,6 +18,7 @@ if ($method == 'belluno_bankslip') :
 ?>
 <div class="box-bankslip">
     <div class="digitable-line">
+        <div class="banner" style="background-image: url('<?php echo $imageIcon?>');"></div>
         <h3><?= Mage::helper('core')->__("Boleto Bancario - Belluno") ?></h3>
         <h4><b>Linha digitável:</b> <?= $digitableLine ?></h4>
         <button style="background-color: #2a87f1;" onclick="window.open('<?= $url ?>');" class="button btn-proceed-checkout btn-checkout" title="Imprimir Boleto" type="button">Imprimir Boleto</button>
@@ -37,6 +39,31 @@ if ($method == 'belluno_bankslip') :
         padding: 5px;
         background:#f5854b;
         color:#FFF;
+    }
+    .digitable-line .banner {
+        width: 100%;
+        max-width: 245px;
+        height: 60px;
+        background-size: 243px;
+        background-repeat: no-repeat;
+    }
+    .digitable-line h3 {
+        color: #005aad;
+        text-align: left;
+        font-weight: 700;
+        font-size: 17px;
+        border-bottom: 1px solid;
+        padding-left: 10px;
+        width: auto;
+    }
+
+    .digitable-line h4 {
+        background: #00b83b;
+        text-align: left;
+        color: #FFF;
+        padding: 7px;
+        width: auto;
+        border-radius: 3px;
     }
 </style>
 
