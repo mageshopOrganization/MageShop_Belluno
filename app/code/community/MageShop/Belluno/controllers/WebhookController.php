@@ -36,7 +36,7 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
                 $orderId = $data['bankslip']['document_code'];
             }
     
-            if (empty($orderId) || empty($status)) {
+            if (empty($orderId)){
                 return false;
             }
             $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
