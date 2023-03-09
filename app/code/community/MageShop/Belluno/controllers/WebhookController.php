@@ -62,6 +62,7 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
              */
             Mage::log( var_export( $resBelluno ,true) , Zend_Log::DEBUG , 'mageshop_bulluno_postback_callback.log', true);
 
+            $status = null;
             /**
              * pega o status de retorno
              */
@@ -72,6 +73,9 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
                 $status = $resBelluno['bankslip']['status'];
             }
 
+            if($status == null){
+                return false;
+            }
             /**
              * Atualiza o pedido no magento
              */
