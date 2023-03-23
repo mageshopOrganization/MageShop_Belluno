@@ -119,6 +119,9 @@ class MageShop_Belluno_ConsultController extends MageShop_Belluno_Controller_Abs
       case 'belluno_pix':
         return "/v2/transaction/{$transaction_id}/pix";
       break;
+      case 'belluno_link':
+        return "/v2/transaction/{$transaction_id}";
+      break;
     }
   }
   
