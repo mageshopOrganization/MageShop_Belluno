@@ -396,14 +396,3 @@ Validation.addAllThese([
     },
   ],
 ]);
-
-function copiarTextoPix(e) {
-  var textoCopiado = document.getElementById("pixTextBelluno");
-  textoCopiado.select();
-  document.execCommand("copy");
-  document.getElementById("pixTextBelluno").blur();
-  setTimeout(function(){
-    e.style.backgroundColor = "#000";
-  }, 6000)
-  e.style.backgroundColor = "#117e31";
-}

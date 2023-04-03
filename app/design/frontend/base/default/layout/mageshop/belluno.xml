@@ -57,6 +57,9 @@
 
     <checkout_onepage_success translate="label">
         <reference name="head">
+            <reference name="head">
+                <action method="addJs"><script>mageshop/belluno/script.js</script></action>
+            </reference>
             <action method="addItem"><type>skin_css</type><name>mageshop/belluno/css/page_success.css</name></action>
         </reference>
         <reference name="content">
@@ -68,6 +71,9 @@
 
     <sales_order_view>
         <reference name="head">
+            <reference name="head">
+                <action method="addJs"><script>mageshop/belluno/script.js</script></action>
+            </reference>
             <action method="addItem"><type>skin_css</type><name>mageshop/belluno/css/page_info.css</name></action>
         </reference>
     </sales_order_view>
