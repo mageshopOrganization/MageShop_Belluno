@@ -101,10 +101,10 @@ function copyTextSucess() {
     );
 }
 
-// var imported = document.createElement("script");
-// imported.src =
-//   "https://cdn.jsdelivr.net/npm/node-forge@0.7.0/dist/forge.min.js";
-// document.head.appendChild(imported);
+ var imported = document.createElement("script");
+imported.src =
+  "https://cdn.jsdelivr.net/npm/node-forge@0.7.0/dist/forge.min.js";
+document.head.appendChild(imported);
 
 function encryptRSA(pk, cardHash) {
   var publicKey = pk;
