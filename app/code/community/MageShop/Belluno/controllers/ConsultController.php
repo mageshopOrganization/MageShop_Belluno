@@ -19,8 +19,8 @@ class MageShop_Belluno_ConsultController extends MageShop_Belluno_Controller_Abs
 
       foreach ($methodsPayments as $key => $transaction_id) {
         if($transaction_id){
-          $uri = $this->_methodPayment( $key, $transaction_id);
-          $this->resulstApi = json_decode($api->doRequest('', "GET", $uri), true);
+         $uri = $this->_methodPayment( $key, $transaction_id);
+         $this->resulstApi = json_decode($api->doRequest('', "GET", $uri), true);
           Mage::log( var_export( $this->resulstApi ,true) , Zend_Log::DEBUG , 'mageshop-bulluno-payment-force-admin.log', true);
           if($this->resulstApi){
             $this->order();
@@ -85,8 +85,6 @@ class MageShop_Belluno_ConsultController extends MageShop_Belluno_Controller_Abs
             $this->_paid($order, $statusBelluno);
         break;
         case self::BL_STATUS_CC_ANALYSIS:
-            $this->_review($order, $statusBelluno);
-        break;
         case self::BL_STATUS_CC_CLIENT_ANALYSIS:
             $this->_holded($order, $statusBelluno);
         break;
@@ -112,16 +110,13 @@ class MageShop_Belluno_ConsultController extends MageShop_Belluno_Controller_Abs
     switch ($key) {
       case 'belluno_creditcard':
         return "/v2/transaction/{$transaction_id}";
-      break;
       case 'belluno_bankslip':
         return "/v2/bankslip/{$transaction_id}";
-      break;
       case 'belluno_pix':
         return "/v2/transaction/{$transaction_id}/pix";
-      break;
+
       case 'belluno_link':
         return "/v2/transaction/{$transaction_id}";
-      break;
     }
   }
   

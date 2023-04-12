@@ -85,8 +85,6 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
                     $this->_paid($order, $status);
                 break;
                 case self::BL_STATUS_CC_ANALYSIS:
-                    $this->_review($order, $status);
-                break;
                 case self::BL_STATUS_CC_CLIENT_ANALYSIS:
                     $this->_holded($order, $status);
                 break;
@@ -112,13 +110,10 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
       switch ($key) {
         case 'belluno_creditcard':
           return "/v2/transaction/{$transaction_id}";
-        break;
         case 'belluno_bankslip':
           return "/v2/bankslip/{$transaction_id}";
-        break;
         case 'belluno_pix':
           return "/v2/transaction/{$transaction_id}/pix";
-        break;
       }
     }
     

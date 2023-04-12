@@ -103,8 +103,6 @@ class MageShop_Belluno_WebsocketController extends MageShop_Belluno_Controller_A
             Agradecemos a sua compra e ficamos à disposição para eventuais dúvidas ou problemas.";
         break;
         case self::BL_STATUS_CC_ANALYSIS:
-            $this->_review($order, $statusBelluno);
-        break;
         case self::BL_STATUS_CC_CLIENT_ANALYSIS:
             $this->_holded($order, $statusBelluno);
         break;
@@ -131,13 +129,10 @@ class MageShop_Belluno_WebsocketController extends MageShop_Belluno_Controller_A
     switch ($key) {
       case 'belluno_creditcard':
         return "/v2/transaction/{$transaction_id}";
-      break;
       case 'belluno_bankslip':
         return "/v2/bankslip/{$transaction_id}";
-      break;
       case 'belluno_pix':
         return "/v2/transaction/{$transaction_id}/pix";
-      break;
     }
   }
   

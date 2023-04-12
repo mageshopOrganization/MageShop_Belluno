@@ -24,6 +24,7 @@ class MageShop_Belluno_Controller_AbstractController extends Mage_Core_Controlle
     }
 
     protected function _paid($order, $statusBelluno){
+        $this->_release($order);
         // Check if the order can be invoiced
         if(!$order->canInvoice()) {
             return true;
@@ -58,7 +59,7 @@ class MageShop_Belluno_Controller_AbstractController extends Mage_Core_Controlle
 
     protected function _holded($order, $statusBelluno)
     {
-        if ($order->getStatus() == 'holded') {
+        if ($order->getStatus() == Mage_Sales_Model_Order::STATE_HOLDED) {
             return $this;
         }
         // Atualize o campo setAdditionalInformation do pedido
@@ -67,8 +68,8 @@ class MageShop_Belluno_Controller_AbstractController extends Mage_Core_Controlle
         $additionalInformation['status'] = $statusBelluno;
         $payment->setAdditionalInformation($additionalInformation);
 
-        $order->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, true);
-        $order->setStatus('holded');
+        $order->setState(Mage_Sales_Model_Order::STATE_HOLDED, true);
+        $order->setStatus(Mage_Sales_Model_Order::STATE_HOLDED);
         $order->addStatusHistoryComment($this->getReason(), false);
         $order->save();
     }
@@ -84,12 +85,13 @@ class MageShop_Belluno_Controller_AbstractController extends Mage_Core_Controlle
         $payment->setAdditionalInformation($additionalInformation);
 
         $order->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, true);
-        $order->setStatus('payment_review');
+        $order->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
         $order->addStatusHistoryComment($this->getReason(), false);
         $order->save();
     }
 
     protected function _cancelled($order, $statusBelluno){
+        $this->_release($order);
         $comment = 'Gateway Belluno Digital: ' . Mage::getModel('core/date')->gmtDate('Y-m-d H:i:s') . ' | ' . $this->getReason();
         if (!$order->canCancel()) {
             return true;
@@ -108,6 +110,7 @@ class MageShop_Belluno_Controller_AbstractController extends Mage_Core_Controlle
     }
 
     protected function _refund($order, $statusBelluno){
+        $this->_release($order);
         if (!$order->canCreditmemo()) {
             return true;
         }
@@ -188,5 +191,23 @@ class MageShop_Belluno_Controller_AbstractController extends Mage_Core_Controlle
         $message .= "Taxa de boleto: R$ " . number_format($payment['bankslip_fee'], 2, ',', '.') . "<br>";
         $message .= "Valor líquido: R$ " . number_format($payment['net_value'], 2, ',', '.') . "<br>";
         $this->setReason($message);
+    }
+
+    public function _release($order)
+    {
+        if($this->_toHold($order)){
+            if ($order->canUnhold()) {
+                $order->unhold();
+            }
+        }
+       
+    }
+
+    public function _toHold($order)
+    {
+        if ($order->getState() == Mage_Sales_Model_Order::STATE_HOLDED || $order->getState() == Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW){
+            return true;
+        }
+        return false;
     }
 }
