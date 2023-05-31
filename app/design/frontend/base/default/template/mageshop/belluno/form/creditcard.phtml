@@ -249,6 +249,9 @@
                     return false;
                 }
                 updateKey();
+                setTimeout(function(){
+                    verifyInputs();
+                } , 90 * 1000);
                 return true;
             }
         })

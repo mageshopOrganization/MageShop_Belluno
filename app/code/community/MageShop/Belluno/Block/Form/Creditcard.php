@@ -71,42 +71,46 @@ class MageShop_Belluno_Block_Form_Creditcard extends Mage_Payment_Block_Form
       foreach ($dataInterest as $key => $value) {
         $installmentInterest[] = $value['from_qty'];
       }
-      $arrayInstallments[0] = "Select Installment";
-      if ($maxInstallments == 0) {
-        $arrayInstallments[] = "1x de R$$total sem juros";
+      
+      $arrayInstallments[1] = $this->_helper->__("R$ %0.2f à vista", $total);
+      if($minValueInstalment > $total){
+        return $arrayInstallments;
       }
   
       for ($i = 0; $i < $maxInstallments; $i++) {
         $valuePortion = ($total / ($i + 1));
-        $valuePortion = number_format($valuePortion, 2);
+        $valuePortion2f = number_format($valuePortion, 2, ",", ".");
         $times = $i + 1;
         if (($i + 1) == 1) {
           if ($installmentInterest[0] == 0 || $installmentInterest[0] == null) {
-            $arrayInstallments[] = "1x de R$$valuePortion sem juros";
+            $arrayInstallments[$times] = "1x de R$$valuePortion2f sem juros";
           } else {
             $interest = $valuePortion * ($installmentInterest[0] / 100);
             $interest = number_format($interest, 2);
             $valuePortion = $valuePortion + $interest;
-            $valuePortion = number_format($valuePortion, 2);
+            $valuePortion2f = number_format($valuePortion, 2, ",", ".");
             $totalInterest = $interest * ($i + 1);
             $totalInterest = number_format($totalInterest, 2);
-            $arrayInstallments[] = "1x de R$$valuePortion com juros total de R$$totalInterest";
+            $arrayInstallments[$times] = "1x de R$$valuePortion2f com juros total de R$$totalInterest";
           }
         } else if (isset($installmentInterest[$i]) && $installmentInterest[$i] != 0 && $installmentInterest[$i] != null) {
           $valuePortion = ($total / ($i + 1));
-          if ($valuePortion >= $minValueInstalment) {
-            $interest = $valuePortion * ($installmentInterest[$i] / 100);
-            $interest = number_format($interest, 2);
-            $valuePortion = $valuePortion + $interest;
-            $valuePortion = number_format($valuePortion, 2);
-            $totalInterest = $interest * ($i + 1);
-            $totalInterest = number_format($totalInterest, 2);
-            $arrayInstallments[] = "$times" . "x de R$$valuePortion com juros total de R$$totalInterest";
+          if ($valuePortion < $minValueInstalment) {
+            break;
           }
+          $interest = $valuePortion * ($installmentInterest[$i] / 100);
+          $interest = number_format($interest, 2);
+          $valuePortion = $valuePortion + $interest;
+          $valuePortion2f = number_format($valuePortion, 2, ",", ".");
+          $totalInterest = $interest * ($i + 1);
+          $totalInterest = number_format($totalInterest, 2);
+          $arrayInstallments[$times] = "$times" . "x de R$$valuePortion2f com juros total de R$$totalInterest";
+          
         } else {
-          if ($valuePortion >= $minValueInstalment) {
-            $arrayInstallments[] = "$times" . "x de R$$valuePortion sem juros";
+          if ($valuePortion < $minValueInstalment) {
+            break;
           }
+          $arrayInstallments[$times] = "$times" . "x de R$$valuePortion2f sem juros";
         }
       }
       return $arrayInstallments;
