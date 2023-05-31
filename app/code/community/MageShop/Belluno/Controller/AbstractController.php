@@ -101,8 +101,7 @@ class MageShop_Belluno_Controller_AbstractController extends Mage_Core_Controlle
         $additionalInformation = $payment->getAdditionalInformation();
         $additionalInformation['status'] = $statusBelluno;
         $payment->setAdditionalInformation($additionalInformation);
-
-        $order->setState(Mage_Sales_Model_Order::STATE_CANCELED, true);
+        $order->cancel();
         $order->setStatus(Mage_Sales_Model_Order::STATE_CANCELED, true);
         $history = $order->addStatusHistoryComment($comment, true);
         $history->setIsCustomerNotified(true); 
