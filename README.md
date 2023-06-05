@@ -2,8 +2,8 @@
 
 ## How to install Belluno Payment extension for Magento 1.9
 ## 1° Download Files
-- Add files public
- ![Screenshot 2022-02-14 140958](https://user-images.githubusercontent.com/69697560/153912567-f831fcaf-b219-4291-af3a-ec3e2e81173c.png)
+- Add the files inside the public repository of your magento 1.9 store
+ ![image](https://github.com/csvitor/MageShop_Belluno/assets/100157056/2447dc4d-52bd-4757-b4dd-ae2db6349af9)
  
  ### Admin Magento 1.9
  #### access:
