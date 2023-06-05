@@ -3,13 +3,6 @@
 | --- | --- | --- |
 | ANTIFRAUDE INCLUSO | TAXAS EXCLUSIVAS | CHECKOUT TRANSPARENTE |
 
-
-## Recursos
-
-- Antifraude incluso
-- Taxas exclusivas
-- Checkout transparente
-
 ## Como contribuir
 
 1. Faça um fork deste repositório.
