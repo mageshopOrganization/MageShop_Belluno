@@ -10,6 +10,14 @@
 - Taxas exclusivas
 - Checkout transparente
 
+## Como contribuir
+
+1. Faça um fork deste repositório.
+2. Crie uma nova branch: `git checkout -b minha-nova-feature`
+3. Faça as alterações desejadas no código.
+4. Faça o commit das suas alterações: `git commit -m 'Adiciona nova feature'`
+5. Faça o push para o repositório remoto: `git push origin minha-nova-feature`
+6. Envie um Pull Request.
 
 ## Como instalar a extensão de pagamento Belluno para o Magento 1.9
 ## 1° Baixar arquivos
