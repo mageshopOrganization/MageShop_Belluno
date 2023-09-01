@@ -50,7 +50,9 @@ class MageShop_Belluno_Controller_AbstractController extends Mage_Core_Controlle
         $invoice->addComment( (string) $this->getReason() , true, true);
         $invoice->save();
         $transactionSave->save();
-
+        // Enviar o email da fatura
+        $invoice->sendEmail();
+        $invoice->setEmailSent(true);
         $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true);
         $order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING, true);
         $order->addStatusHistoryComment( (string) $this->getReason() , false);
