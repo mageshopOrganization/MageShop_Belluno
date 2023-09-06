@@ -27,7 +27,6 @@
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
               <show_in_store>1</show_in_store>
-              <validate>required-entry</validate>
             </auth_token>
             <public_key translate="label">
               <label>Public Key Konduto</label>
@@ -36,7 +35,6 @@
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
               <show_in_store>0</show_in_store>
-              <validate>required-entry</validate>
             </public_key>
             <base_url>
               <label>Site Base Url</label>
@@ -74,6 +72,9 @@
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
             <validate>required-entry</validate>
+            <depends>
+              <active>1</active>
+            </depends>
           </title>
           <order_status translate="label">
             <label>New Order Status</label>
@@ -83,6 +84,9 @@
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
             <show_in_store>0</show_in_store>
+            <depends>
+              <active>1</active>
+            </depends>
           </order_status>
           <installments translate="label">
             <label>Número de parcelas</label>
@@ -92,6 +96,9 @@
             <show_in_website>1</show_in_website>
             <show_in_store>0</show_in_store>
             <validate>required-entry validate-number integer</validate>
+            <depends>
+              <active>1</active>
+            </depends>
           </installments>
           <installment_interest translate="label">
             <label>Juros Parcelados</label>
@@ -101,6 +108,9 @@
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
             <show_in_store>0</show_in_store>
+            <depends>
+              <active>1</active>
+            </depends>
           </installment_interest>
           <min_installment translate="label">
             <label>Valor Mínimo por Parcela</label>
@@ -110,6 +120,9 @@
             <show_in_website>1</show_in_website>
             <show_in_store>0</show_in_store>
             <validate>required-entry validate-number</validate>
+            <depends>
+              <active>1</active>
+            </depends>
           </min_installment>
           <capture_tax translate="label">
             <label>Capturar documento (CPF or CNPJ) no formulário de pagamento?</label>
@@ -119,6 +132,9 @@
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
             <show_in_store>0</show_in_store>
+            <depends>
+              <active>1</active>
+            </depends>
           </capture_tax>
         </fields>
       </belluno_creditcard>
@@ -148,6 +164,9 @@
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
             <validate>required-entry</validate>
+            <depends>
+              <active>1</active>
+            </depends>
           </title>
           <order_status translate="label">
             <label>New Order Status</label>
@@ -157,6 +176,9 @@
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
             <show_in_store>0</show_in_store>
+            <depends>
+              <active>1</active>
+            </depends>
           </order_status>
           <days_expiration translate="label">
             <label>Dias para Vencimento</label>
@@ -167,6 +189,9 @@
             <show_in_store>0</show_in_store>
             <validate>required-entry validate-number integer</validate>
             <comment>Se não for preenchido será considerado um dia.</comment>
+            <depends>
+              <active>1</active>
+            </depends>
           </days_expiration>
           <capture_tax translate="label">
             <label>Capturar documento (CPF or CNPJ) no formulário de pagamento?</label>
@@ -176,6 +201,9 @@
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
             <show_in_store>0</show_in_store>
+            <depends>
+              <active>1</active>
+            </depends>
           </capture_tax>
         </fields>
       </belluno_bankslip>
@@ -205,6 +233,9 @@
               <show_in_website>1</show_in_website>
               <show_in_store>1</show_in_store>
               <validate>required-entry</validate>
+              <depends>
+                <active>1</active>
+              </depends>
             </title>
             <order_status translate="label">
               <label>New Order Status</label>
@@ -214,6 +245,9 @@
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
               <show_in_store>0</show_in_store>
+              <depends>
+                <active>1</active>
+              </depends>
             </order_status>
             <websocket translate="label">
               <label>Websocket</label>
@@ -224,6 +258,9 @@
               <show_in_website>1</show_in_website>
               <show_in_store>0</show_in_store>
               <comment>Atualização em tempo real após o pagamento.</comment>
+              <depends>
+                <active>1</active>
+              </depends>
             </websocket>
             <capture_tax translate="label">
               <label>Capturar documento (CPF or CNPJ) no formulário de pagamento?</label>
@@ -233,6 +270,9 @@
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
               <show_in_store>0</show_in_store>
+              <depends>
+                <active>1</active>
+              </depends>
             </capture_tax>
           </fields>
         </belluno_pix>
@@ -262,6 +302,9 @@
               <show_in_website>1</show_in_website>
               <show_in_store>1</show_in_store>
               <validate>required-entry</validate>
+              <depends>
+                <active>1</active>
+              </depends>
             </title>
             <payment_methods translate="label">
               <label>Payment Methods</label>
@@ -271,6 +314,9 @@
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
               <show_in_store>0</show_in_store>
+              <depends>
+                <active>1</active>
+              </depends>
             </payment_methods>
             <order_status translate="label">
               <label>New Order Status</label>
@@ -280,6 +326,9 @@
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
               <show_in_store>0</show_in_store>
+              <depends>
+                <active>1</active>
+              </depends>
             </order_status>
           </fields>
         </belluno_link>
