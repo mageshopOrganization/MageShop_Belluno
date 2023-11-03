@@ -45,7 +45,14 @@ class MageShop_Belluno_Validations_CreditCardValidator
       'length' => array(16),
       'cvcLength' => array(3),
       'luhn' => true
-    ]
+    ],
+    'amex' => [
+          'type' => 'amex',
+          'pattern' => '/(\d{1,4})(\d{1,6})?(\d{1,5})?/',
+          'length' => array(15, 16),
+          'cvcLength' => array(3),
+          'luhn' => true
+    ],
   ];
 
   /**
@@ -94,7 +101,8 @@ class MageShop_Belluno_Validations_CreditCardValidator
       '3' => 'elo',
       '4' => 'hipercard',
       '5' => 'cabal',
-      '6' => 'hiper'
+      '6' => 'hiper',
+      '7' => 'amex',
     ];
 
     $res = $this->validateCreditCard($number);
