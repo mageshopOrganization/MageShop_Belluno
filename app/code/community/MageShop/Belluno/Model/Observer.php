@@ -42,7 +42,7 @@ class MageShop_Belluno_Model_Observer
                 $connector = $this->getConnector();
                 $value = $creditmemo->getGrandTotal();
                 $transactionId = $payment->getAdditionalInformation('transaction_id');
-                Mage::log( "Reembolso Belluno Payment: ID Transanction #". $transactionId , Zend_Log::DEBUG , 'mageshop_bulluno_refund.log', true);
+                Mage::helper("belluno")->log("Reembolso Belluno Payment: ID Transanction #". $transactionId, 'mageshop_bulluno_refund.log');
                 $request = [
                     'amount' => $value,
                     'reason' => '3'
@@ -51,7 +51,7 @@ class MageShop_Belluno_Model_Observer
                 $connector->doRequest($request, "POST", "/transaction/$transactionId/refund");
             }
         } catch (\Throwable $th) {
-            Mage::log( "Reembolso Belluno Payment: RETURN". $th->getMessage() , Zend_Log::DEBUG , 'mageshop_bulluno_refund.log', true);
+            Mage::helper("belluno")->log( "Reembolso Belluno Payment: RETURN". $th->getMessage() ,'mageshop_bulluno_refund.log');
         }
     }
 

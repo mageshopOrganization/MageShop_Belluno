@@ -9,7 +9,7 @@ class MageShop_Belluno_Helper_Data extends Mage_Core_Helper_Abstract
     const MS_BELLUNO_SANDBOX = "https://ws-sandbox.bellunopag.com.br";
     const MS_BELLUNO_API = "https://api.belluno.digital";
     const MS_BELLUNO_WEBSOCKET_PIX = "payment/belluno_pix/websocket";
-
+    const MS_BELLUNO_ACTION_LOGS = "payment/mageshop_belluno_custompayment/action_logs";
     public function getToken()
     {
         return Mage::getStoreConfig(self::MS_BELLUNO_TOKEN);
@@ -38,4 +38,27 @@ class MageShop_Belluno_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getStoreConfig(self::MS_BELLUNO_WEBSOCKET_PIX);
     }
+
+    public function getActiveLogs(){
+        return Mage::getStoreConfig(self::MS_BELLUNO_ACTION_LOGS);
+    }
+
+     /**
+     * Nome file log
+     *
+     * @param string $type
+     * @param string $content
+     * @param string $file
+     */
+    public function log($content , $file = 'belluno_log.text.log', $action = null)
+    {
+        if($this->getActiveLogs() == MageShop_Belluno_Model_Source_Logs::MS_BELLUNO_ACTION_SYSTEM){
+            Mage::log($content, null , $file);
+        }elseif($this->getActiveLogs() == MageShop_Belluno_Model_Source_Logs::MS_BELLUNO_ACTION_TRANSACTION && $this->getActiveLogs() == $action){
+            Mage::log($content, null , $file , true);
+        }elseif($this->getActiveLogs() == MageShop_Belluno_Model_Source_Logs::MS_BELLUNO_ACTION_ALL){
+            Mage::log($content, null , $file , true);
+        }
+    }
+
 }

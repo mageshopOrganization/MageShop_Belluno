@@ -19,9 +19,9 @@ class MageShop_Belluno_ConsultController extends MageShop_Belluno_Controller_Abs
 
       foreach ($methodsPayments as $key => $transaction_id) {
         if($transaction_id){
-         $uri = $this->_methodPayment( $key, $transaction_id);
-         $this->resulstApi = json_decode($api->doRequest('', "GET", $uri), true);
-          Mage::log( var_export( $this->resulstApi ,true) , Zend_Log::DEBUG , 'mageshop-bulluno-payment-force-admin.log', true);
+          $uri = $this->_methodPayment( $key, $transaction_id);
+          $this->resulstApi = json_decode($api->doRequest('', "GET", $uri), true);
+          Mage::helper("belluno")->log( json_encode( $this->resulstApi),'mageshop-bulluno-payment-force-admin.log');
           if($this->resulstApi){
             $this->order();
           }else{

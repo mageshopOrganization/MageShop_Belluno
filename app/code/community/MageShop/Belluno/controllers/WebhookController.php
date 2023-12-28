@@ -20,14 +20,13 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
             /**
              * Recebe uma atualização em json
              */
+            $helper = Mage::helper("belluno");
             $post = new Zend_Controller_Request_Http();
-            $data = $post->getRawBody();
-            $data = json_decode($data, true);
-            Mage::log( var_export( $data ,true) , Zend_Log::DEBUG , 'mageshop_bulluno_postback.log', true);
-            
+            $rawbody = $post->getRawBody();
+            $data = json_decode($rawbody, true);
+            $helper->log($rawbody, 'mageshop_bulluno_postback.log');
             $orderId = null;
             $status = null;
-            
             if(isset($data['transaction']) && count($data['transaction']) > 0){
                 $transactionId = $data['transaction']['transaction_id'];
                 $orderId = $data['transaction']['details'];
@@ -35,12 +34,10 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
                 $transactionId = $data['bankslip']['id'];
                 $orderId = $data['bankslip']['document_code'];
             }
-    
             if (empty($orderId)){
                 return false;
             }
             $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
-
             if(!$order){
                 return false;
             }
@@ -49,7 +46,19 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
              * Pega o code_payment_method
              */
             $payment = $order->getPayment();
-            $method = $payment->getMethod();
+            if($payment && $payment->getMethod()){
+                $method = $payment->getMethod();
+            }else{
+                $helper->log("Erro: Objeto de pagamento inválido ou método de pagamento não definido.", 'mageshop_bulluno_error_postback.log');
+                $order->addStatusHistoryComment(
+                    $helper->_("Ops, Houve um Problema ao Atualizar o Pedido \n 
+                        Desculpe-nos pelo transtorno. Estamos enfrentando dificuldades ao tentar processar a atualização do seu pedido. Por favor, 
+                        aguarde alguns momentos, ou se preferir, tente forçar a atualização clicando no botão \"Forçar Pedido\".") 
+                    , false);
+                $order->save();
+                return false;
+            }
+            
             $uri = $this->_methodPayment($method, $transactionId);
             $api = $this->getConnector();
 
@@ -60,8 +69,8 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
             /**
              * Gera um log do resultado
              */
-            Mage::log( var_export( $resBelluno ,true) , Zend_Log::DEBUG , 'mageshop_bulluno_postback_callback.log', true);
-
+            $helper->log(json_encode($resBelluno) , 'mageshop_bulluno_postback_callback.log');
+          
             $status = null;
             /**
              * pega o status de retorno
@@ -100,7 +109,7 @@ class MageShop_Belluno_WebhookController extends MageShop_Belluno_Controller_Abs
                 break;
             }
         } catch (\Exception $e) {
-           Mage::log( var_export( $e ,true) , Zend_Log::DEBUG , 'mageshop_bulluno_error_postback.log', true);
+            $helper->log( json_encode( $e ), 'mageshop_bulluno_error_postback.log');
            return false;
         }
     }

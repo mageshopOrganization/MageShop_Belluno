@@ -48,7 +48,7 @@ class MageShop_Belluno_Service_ApiBelluno
         return $response;
     }
     public function setLogBeelluno($title, $body, $file){
-        Mage::log("[-- {$title} --] {$body}", null , $file, true);
+        $this->helper->log("[-- {$title} --] {$body}", $file, MageShop_Belluno_Model_Source_Logs::MS_BELLUNO_ACTION_TRANSACTION);
     }
     private function setMessege($res){
         $this->resBelluno = json_decode($res, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
@@ -56,5 +56,4 @@ class MageShop_Belluno_Service_ApiBelluno
     public function getMessege(){
         return $this->resBelluno;
     }
-
 }

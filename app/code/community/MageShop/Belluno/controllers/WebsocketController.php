@@ -21,12 +21,12 @@ class MageShop_Belluno_WebsocketController extends MageShop_Belluno_Controller_A
         );
       }
 
-      Mage::log( var_export( $methodsPayments ,true) , Zend_Log::DEBUG , 'bulluno-payment-websocket.log', true);
+      Mage::helper("belluno")->log( json_encode( $methodsPayments ), 'bulluno-payment-websocket.log');
       foreach ($methodsPayments as $key => $transaction_id) {
         if(!empty($transaction_id) || strlen($transaction_id)){
           $uri = $this->_methodPayment( $key, $transaction_id);
           $this->resulstApi = json_decode($api->doRequest('', "GET", $uri), true);
-          Mage::log( var_export( $this->resulstApi ,true) , Zend_Log::DEBUG , 'bulluno-payment-websocket.log', true);
+          Mage::helper("belluno")->log( json_encode( $this->resulstApi ), 'bulluno-payment-websocket.log');
           if($this->resulstApi){
             $this->order();
           }else{

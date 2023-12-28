@@ -22,10 +22,6 @@ class MageShop_Belluno_Model_Payment_Bankslip_Transaction
     if(isset($response['message'])){
         Mage::throwException($error);
     }elseif(isset($response['errors'])){
-        // $resError = current($response['errors']);
-        // if(gettype($resError) == 'array'){
-        //     $error = current($resError);
-        // }
         Mage::throwException($error);
     }
     $bankslip = [
