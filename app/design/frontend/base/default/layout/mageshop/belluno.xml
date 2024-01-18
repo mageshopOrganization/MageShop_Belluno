@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <block type="core/template" name="belluno.config" template="mageshop/belluno/config/header.phtml" />
+        </reference>
+    </default>
     <onestepcheckout_index_index translate="label">
         <reference name="head">
             
