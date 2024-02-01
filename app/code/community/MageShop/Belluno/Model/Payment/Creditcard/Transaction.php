@@ -33,6 +33,12 @@ class MageShop_Belluno_Model_Payment_Creditcard_Transaction
         $info->setAdditionalInformation("transaction_id", $response['transaction']['transaction_id']);
         $info->setAdditionalInformation("value", $response['transaction']['value']);
         $info->setAdditionalInformation("status", $response['transaction']['status']);
+        if(isset($response['transaction']['status_code'])){
+            $info->setAdditionalInformation("status_code", $response['transaction']['status_code']);
+        }
+        if(isset($response['transaction']['link'])){
+            $info->setAdditionalInformation("link", $response['transaction']['link']);
+        }
         $info->setAdditionalInformation("resBelluno", $connector->getMessege());
     }
 

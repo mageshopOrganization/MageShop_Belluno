@@ -152,3 +152,12 @@ if ($orderId && $payment->getMethod() == 'belluno_pix'):
     </div>
     <br>
 <?php endif; ?>
+
+<?php if ($payment->getMethod() == 'belluno_creditcard' && $payment->getAdditionalInformation("status_code") == 8): ?>
+<?php $linkAnalysis = str_replace('\\','', $payment->getAdditionalInformation("link")); ?>
+<script type="text/javascript">
+    window.addEventListener("load", function(){
+        window.open('<?php echo $linkAnalysis;?>', '_blank');
+    });
+</script>
+<?php endif; ?>
