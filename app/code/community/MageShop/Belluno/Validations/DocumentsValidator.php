@@ -7,7 +7,7 @@ class MageShop_Belluno_Validations_DocumentsValidator {
    * @param string $document
    * @return bool
    */
-  public function validateDocument($document): bool {
+  public function validateDocument($document) {
     $document = preg_replace('/[^0-9]/is', '', $document);
     if (strlen($document) == 11) {
       return $this->validateDocumentCpf($document);

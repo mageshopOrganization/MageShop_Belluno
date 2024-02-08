@@ -49,16 +49,20 @@ class MageShop_Belluno_Model_Payment_Creditcard_CreateRequest
         $cardNumber = preg_replace('/[^0-9]/is', '', $data['card_number']);
 
         $taxDocument = $this->getUseTaxDocumentCapture();
+
         if ($taxDocument == true) {
             $clientDocument = $data['client_document'];
+            $cardHolderDocument = $data['card_holder_document'];
         } else {
             $clientDocument = $this->getTaxVat($customerId);
             $clientDocument = $this->formatCpfCnpj($clientDocument);
+            $cardHolderDocument = $clientDocument;
         }
-        $cardHolderDocument = $data['card_holder_document'];
+        
         if (empty($clientDocument)) {
             $clientDocument = $quote->getCustomerTaxvat();
             $clientDocument = $this->formatCpfCnpj($clientDocument);
+            $cardHolderDocument = $clientDocument;
         }
 
         $totalValue = $quote->getBaseGrandTotal();
@@ -78,7 +82,6 @@ class MageShop_Belluno_Model_Payment_Creditcard_CreateRequest
         $capture = $this->getRuleCapture();
         $cardHash = $data['card_hash'];
         $cardHolderName = $data['name_on_card'];
-        $cardHolderDocument = $cardHolderDocument;
         $cardHolderCellphone = $data['card_holder_cellphone'];
         $cardHolderBirth = $data['card_holder_birth'];
         $brand = $this->getCreditCardValidator()->getCardTypeBelluno($cardNumber);
@@ -90,7 +93,6 @@ class MageShop_Belluno_Model_Payment_Creditcard_CreateRequest
              $clientName = $quote->getCustomerFirstname();
         }
 
-        $clientDocument = $clientDocument;
         $clientEmail = $quote->getCustomerEmail();
         $clientPhone = $cardHolderCellphone;
         //shipping

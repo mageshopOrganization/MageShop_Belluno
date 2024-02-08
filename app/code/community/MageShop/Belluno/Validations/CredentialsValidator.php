@@ -7,7 +7,7 @@ class MageShop_Belluno_Validations_CredentialsValidator {
    * @param string $cellphone
    * @return bool
    */
-  public function validateCellphone($cellphone): bool {
+  public function validateCellphone($cellphone) {
     if (strlen($cellphone) >= 9) {
     	return true;
     } else {
@@ -20,7 +20,7 @@ class MageShop_Belluno_Validations_CredentialsValidator {
    * @param string $date
    * @return bool
    */
-  public function validateDateBirth($date): bool {
+  public function validateDateBirth($date) {
     if ($this->validateDate($date, 'd/m/Y')) {
       return true;
     } else {
@@ -34,7 +34,7 @@ class MageShop_Belluno_Validations_CredentialsValidator {
    * @param string $format
    * @return bool
    */
-  public function validateDate($date, $format): bool {
+  public function validateDate($date, $format) {
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;
   }

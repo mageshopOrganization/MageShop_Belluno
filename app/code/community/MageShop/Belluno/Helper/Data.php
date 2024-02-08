@@ -61,4 +61,22 @@ class MageShop_Belluno_Helper_Data extends Mage_Core_Helper_Abstract
         }
     }
 
+    /**
+     * Retrieve array of available years
+     *
+     * @return array
+     */
+    public function getYears()
+    {
+        $years = array();
+        $first = Mage::getSingleton('core/date')->date('y');
+
+        for ($index=0; $index <= 20; $index++) {
+            $year = $first + $index;
+            $years[$year] = $year;
+        }
+
+        return $years;
+    }
+    
 }

@@ -17,7 +17,7 @@ class MageShop_Belluno_Service_ApiBelluno
      * @param string $uri
      * @return string
      */
-    public function doRequest($dataRequest, $method, $uri): string
+    public function doRequest($dataRequest, $method, $uri)
     {
         $token = $this->helper->getToken();
         $url = $this->helper->getUrlEnvironment() . $uri;

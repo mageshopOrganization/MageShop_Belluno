@@ -7,7 +7,7 @@ class MageShop_Belluno_Validations_RegionCodeAPI {
    * @param string $state
    * @return string
    */
-  public function getRegionCode($state): string {
+  public function getRegionCode($state) {
     $response = $this->getStates();
     
     foreach ($response as $states) {

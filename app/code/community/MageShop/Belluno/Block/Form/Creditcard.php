@@ -36,9 +36,10 @@ class MageShop_Belluno_Block_Form_Creditcard extends Mage_Payment_Block_Form
     public function getCcYears()
     {
       $years = $this->getData('cc_years');
-      if (is_null($years)) {
+      if ($years == null) {
         $years[0] = "Year";
-        $years = array_merge($years, $this->_getConfig()->getYears());
+        $years = $this->_helper->getYears();
+        $years = array(0=>$this->__('Year'))+$years;
         $this->setData('cc_years', $years);
       }
       return $years;

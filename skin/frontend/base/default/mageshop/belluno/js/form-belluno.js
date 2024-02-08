@@ -122,7 +122,7 @@ function encryptRSA(pk, cardHash) {
 }
 
 async function updateKey() {
-  let data = await fetch(`${baseUrlBelluno}belluno/hash`);
+  let data = await fetch(`${baseUrlBelluno}belluno/hash/index`);
   data = await data.json();
   var rsapk = JSON.parse(data);
   var cardNumber = document.getElementById("belluno_card_number").value;

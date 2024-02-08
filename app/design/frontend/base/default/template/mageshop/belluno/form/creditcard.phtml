@@ -75,7 +75,9 @@
                             <label for="card_cvv" class="required"><?php echo $helper->__("Ano do Vencimento") ?><em>*</em></label>
                             <div class="input-box">
                                 <select name="belluno_expiryyear"  class="input-text required-entry validate-expiryyear" >
-                                    <option selected disabled><?php echo $helper->__("Year") ?></option>
+                                    <?php foreach ($this->getCcYears() as $k=>$v): ?>
+                                        <option value="<?php echo $k?$k:'' ?>"><?php echo $v ?></option>
+                                    <?php endforeach ?>
                                 </select>
                                 <input type="hidden" id="belluno_expires_at" class="input-text required-entry validate-expires_at" name="payment[expires_at]" autocomplete="off"/>
                             </div>
@@ -256,23 +258,6 @@
             }
         })
     })();
-
-    $belluno(document).ready(function () {
-        var today = new Date();
-            var fullYear = today.getFullYear().toString();
-            //console.log("fullYear",fullYear);
-            var shortYear=+fullYear.slice(-2);
-            //console.log($('select[name=myexpiryyear]').html();
-            //console.log("shortYear",shortYear);
-            var init=$belluno('select[name=belluno_expiryyear]').html(),
-                modified=init,
-                i=0;
-            for (i;i<20;i++){
-                modified+='<option value="'+(shortYear+i)+'">'+(shortYear+i)+'</option>'
-            }
-            
-            $belluno('select[name=belluno_expiryyear]').html(modified);
-    });
 
     function bellunoInit(){
         $belluno("#belluno_card_number").on("input", function() {
