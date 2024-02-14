@@ -209,7 +209,7 @@ class MageShop_Belluno_Model_Payment_Creditcard_CreateRequest
      * @param string $installmentNumber
      * @return array
      */
-    public function getValueWithInterest($totalValue, $installmentNumber): array
+    public function getValueWithInterest($totalValue, $installmentNumber)
     {
         $interest = Mage::getStoreConfig('payment/belluno_creditcard/installment_interest');
         $maxInstallment = Mage::getStoreConfig('payment/belluno_creditcard/installments');
