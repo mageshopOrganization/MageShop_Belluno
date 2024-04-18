@@ -88,7 +88,7 @@ class MageShop_Belluno_Model_Payment_Link_CreateRequest {
         ];
       }
     }
-    if ($shippingValue > 0) {
+    if (abs($shippingValue) > 0.00000001) {
       $cart[] = [
         self::PRODUCT_NAME => "Envio",
         self::QUANTITY => '1',
