@@ -73,6 +73,9 @@ class MageShop_Belluno_Model_Payment_Pix_CreateRequest {
     $items = $quote->getAllItems();
     $subTotal = $quote->getSubtotal();
     $shippingValue = $value - $subTotal;
+    if(abs($shippingValue) < 0.00000001){
+      $shippingValue = 0;
+    }
 
     foreach ($items as $item) {
       if ($item->getProductType() == 'simple' || $item->getProductType() == 'grouped') {
@@ -89,7 +92,7 @@ class MageShop_Belluno_Model_Payment_Pix_CreateRequest {
         ];
       }
     }
-    if (abs($shippingValue) > 0.00000001) {
+    if ($shippingValue > 0) {
       $array[] = [
         self::PRODUCT_NAME => 'Envio',
         self::QUANTITY => '1',

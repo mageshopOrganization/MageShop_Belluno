@@ -115,6 +115,10 @@ class MageShop_Belluno_Model_Payment_Creditcard_CreateRequest
         $items = $quote->getAllItems();
         $subTotal = $quote->getSubtotal();
         $shippingValue = $value - $subTotal - $dataValue['valueInterest'];
+        if(abs($shippingValue) < 0.00000001){
+            $shippingValue = 0;
+        }
+
         $card_flag = $data['card_flag'];
         //create array for show in admin
         $this->createViewInformations(
@@ -146,7 +150,7 @@ class MageShop_Belluno_Model_Payment_Creditcard_CreateRequest
                 ];
             }
         }
-        if (abs($shippingValue) > 0.00000001) {
+        if ($shippingValue > 0) {
             $array[] = [
                 self::PRODUCT_NAME => 'Envio',
                 self::QUANTITY => '1',

@@ -73,6 +73,9 @@ class MageShop_Belluno_Model_Payment_Link_CreateRequest {
     $items = $order->getAllItems();
     $subTotal = $order->getSubtotal();
     $shippingValue = $value - $subTotal;
+    if(abs($shippingValue) < 0.00000001){
+      $shippingValue = 0;
+    }
     foreach ($items as $item) {
       if ($item->getProductType() == 'simple' || $item->getProductType() == 'grouped') {
         if ($item->getPrice() == 0) {
@@ -88,7 +91,7 @@ class MageShop_Belluno_Model_Payment_Link_CreateRequest {
         ];
       }
     }
-    if (abs($shippingValue) > 0.00000001) {
+    if ($shippingValue > 0) {
       $cart[] = [
         self::PRODUCT_NAME => "Envio",
         self::QUANTITY => '1',
