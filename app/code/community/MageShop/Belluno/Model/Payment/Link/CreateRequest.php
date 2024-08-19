@@ -175,4 +175,12 @@ class MageShop_Belluno_Model_Payment_Link_CreateRequest {
   public function getRegionCodeAPI() {
     return new MageShop_Belluno_Validations_RegionCodeAPI();
   }
+
+    /**
+     * Function to get tax document
+     */
+    public function getInstallmentsNumber()
+    {
+        return Mage::getStoreConfig('payment/belluno_link/installments');
+    }
 }
